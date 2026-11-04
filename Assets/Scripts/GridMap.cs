@@ -1,25 +1,39 @@
+/***************************************************************
+*file: GridMap.cs
+*author: E. Buff
+*class: CS 4700 – Game Development
+*assignment: program 4
+*date last modified: 11/4/2026
+*
+*purpose: This program defines how enemy AI sees the map,
+*         containing all information necessary for pathfinding.
+****************************************************************/
 using UnityEngine;
 
 public class GridMap : MonoBehaviour
 {
-    public int width = 64; // in cells
-    public int height = 64; // also in cells
-    public float cellSize = 1.0f; // in Unity units
+    [SerializeField] private int WIDTH = 64; // in cells
+    [SerializeField] private int HEIGHT = 64; // also in cells
+    [SerializeField] private float CELL_SIZE = 1.0f; // in Unity units
 
     private bool[,] walkable;
 
-
-    // Gives center of a cell as a vector3 corresponding to position transform
+    // function: CellToWorld
+    // purpose: Gives center of a cell as a vector3 corresponding to position transform
     // (position is relative to parent object (which should be World))
-    public Vector3 CellToWorld(int x, int y) {return new Vector3((x + 0.5f) * cellSize, (y + 0.5f) * cellSize, 0);}
+    public Vector3 CellToWorld(int x, int y) {
+                    return new Vector3((x + 0.5f) * cellSize, (y + 0.5f) * cellSize, 0);}
     public Vector3 CellToWorld(Vector2Int coords) {return CellToWorld(coords.x, coords.y);}
 
-    // Finds the cell which the provided coordinates local to world lie within
-    // Float to int should truncate properly.
-    // I believe that due to finite float precision attempting to use this on a border
-    //   is unpredictable.
-    public Vector2Int WorldToCell(Vector3 coords) {return new Vector2Int(Mathf.FloorToInt(coords.x / cellSize), Mathf.FloorToInt(coords.y / cellSize));}
+    // function: WorldToCell
+    // purpose: Finds the cell which the provided (local to world) coordinates lie within.
+    // Float to int should truncate properly, but I believe that due to finite float precision,
+    // attempting to use this exactly on a border near tiles is unpredictable.
+    public Vector2Int WorldToCell(Vector3 coords) {
+        return new Vector2Int(Mathf.FloorToInt(coords.x / cellSize), Mathf.FloorToInt(coords.y / cellSize));}
 
+    // function: Start
+    // purpose: Called on the frame when the script is enabled. Here¸ it initializes the grid's arrray.
     // TEMPORARY: Make walkable a checkerboard
     public void Start() {
         walkable = new bool[width, height];
@@ -30,8 +44,9 @@ public class GridMap : MonoBehaviour
         }
     }
 
-    // Draws an overlay of the Dijkstra grid that shows how the enemy AI is treating the landscape
-    // If this doesn't update as it gets more complex then I have failed.
+    // function: OnDrawGizmos
+    // purpose: If Gizmos are enabled, draws an overlay of the Dijkstra grid 
+    // which shows how the enemy AI is treating the landscape
     private void OnDrawGizmos() {
         if (walkable == null) return;
         Gizmos.matrix = transform.localToWorldMatrix;
