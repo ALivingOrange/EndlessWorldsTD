@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/1/2026
+*date last modified: 11/6/2026
 *
 *purpose: Extremely rudimentary enemy AI. Just moves the enemy in an ellipse.
 *
