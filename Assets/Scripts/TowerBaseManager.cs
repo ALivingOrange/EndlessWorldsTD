@@ -170,43 +170,32 @@ public class TowerBaseManager : MonoBehaviour
     // Purpose: Attaches a core to the base. This isn't fully implement yet.
     public void AttachCore(TowerCoreManager core)
     {
-        if (core == null)
+        if (core == null || attachedCore != null || socket == null)
         {
             return;
         }
 
-        if (attachedCore != null)
-        {
-            return;
-        }
-
-        core.transform.SetParent(transform, false);
-        core.transform.localPosition = socket.localPosition;
+        core.transform.SetParent(socket, false);
+        core.transform.localPosition = Vector3.zero;
         core.transform.localRotation = Quaternion.identity;
 
         attachedCore = core;
         core.Initialize(this);
 
         return;
-
     }
 
     // function: AttachHead
     // Purpose: Attaches a head to the base. This isn't fully implement yet.
     public void AttachHead(TowerHeadManager head)
     {
-        if (head == null)
+        if (head == null || attachedHead != null || socket == null)
         {
             return;
         }
 
-        if (attachedHead != null)
-        {
-            return;
-        }
-
-        head.transform.SetParent(transform, false);
-        head.transform.localPosition = socket.localPosition;
+        head.transform.SetParent(socket, false);
+        head.transform.localPosition = Vector3.zero;
         head.transform.localRotation = Quaternion.identity;
 
         attachedHead = head;
