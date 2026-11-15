@@ -3,7 +3,7 @@
 *author: E. Buff
 *class: CS 4700 – Game Development
 *assignment: program 4
-*date last modified: 11/4/2026
+*date last modified: 11/14/2026
 *
 *purpose: This program defines how enemy AI sees the map,
 *         containing all information necessary for pathfinding.
@@ -16,7 +16,7 @@ public class GridMap : MonoBehaviour
     [SerializeField] private int HEIGHT = 64; // also in cells
     [SerializeField] private float CELL_SIZE = 1.0f; // in Unity units
 
-    private bool[,] walkable;
+    private AITile[,] grid;
 
     // function: CellToWorld
     // purpose: Gives center of a cell as a vector3 corresponding to position transform
@@ -34,12 +34,15 @@ public class GridMap : MonoBehaviour
 
     // function: Start
     // purpose: Called on the frame when the script is enabled. Here¸ it initializes the grid's arrray.
-    // TEMPORARY: Make walkable a checkerboard
+    // TEMPORARY: Assign a bunch of values randomly
     public void Start() {
-        walkable = new bool[WIDTH, HEIGHT];
+        grid = new AITile[WIDTH, HEIGHT];
         for(int i = 0; i < WIDTH; i++) {
             for(int j = 0; j < HEIGHT; j++) {
-                walkable[i, j] = (i + j) % 2 == 0;
+                grid[i, j] = new AITile();
+                grid[i, j].walkable = Random.value > 0.25f;
+                grid[i, j].is_water = Random.value < 0.25f;
+                grid[i, j].difficulty = Random.Range(0.0f, 3.0f);
             }
         }
     }
@@ -48,13 +51,14 @@ public class GridMap : MonoBehaviour
     // purpose: If Gizmos are enabled, draws an overlay of the Dijkstra grid 
     // which shows how the enemy AI is treating the landscape
     private void OnDrawGizmos() {
-        if (walkable == null) return;
+        if (grid == null) return;
         Gizmos.matrix = transform.localToWorldMatrix;
         for(int i = 0; i < WIDTH; i++) {
             for(int j = 0; j < HEIGHT; j++) {
                 // For now, just black or white boxes.
-                if (walkable[i, j]) Gizmos.color = Color.white;
-                else if (!walkable[i, j]) Gizmos.color = Color.black;
+                if (!grid[i, j].walkable) Gizmos.color = Color.black;
+                else if (grid[i, j].is_water) Gizmos.color = Color.blue;
+                else Gizmos.color = new Color(Mathf.Min(1.0f, grid[i, j].difficulty/3.0f), 0.5f, 0.2f);
                 Gizmos.DrawCube(center: CellToWorld(i, j), size: new Vector3(CELL_SIZE, CELL_SIZE, 0));
             }
         }
