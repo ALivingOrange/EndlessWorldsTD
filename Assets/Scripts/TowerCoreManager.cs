@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/8/2026
+*date last modified: 11/14/2026
 *
 *purpose: Allows the Tower Cores to function as intended by the development team
 *         Determines the physics attributes of the tower, i.e. damage, fire rate, shots per burst.
@@ -37,13 +37,11 @@ public class TowerCoreManager : MonoBehaviour
     {
         parentBase = b;
 
-        currDamage = coreData.damage;
-
         if (coreData == null)
         {
             return;
         }
-
+       
         currDamage = coreData.damage;
         currFireInterval = coreData.fireInterval;
         currShotsPerBurst = coreData.shotsPerBurst;
@@ -62,9 +60,17 @@ public class TowerCoreManager : MonoBehaviour
             return;
         }
 
-        if (parentBase.Target == null)
+        if (parentBase.attachedHead == null)
         {
             return;
+        }
+
+        if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
+        {
+            if (fireCountdown > 0f)
+            { 
+                fireCountdown = Time.deltaTime;
+            }
         }
 
         if (fireCountdown <= 0f)
@@ -91,7 +97,7 @@ public class TowerCoreManager : MonoBehaviour
                 yield break;
             }
 
-            if (parentBase.Target == null)
+            if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
             {
                 yield break;
             }

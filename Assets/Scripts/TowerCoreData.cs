@@ -22,4 +22,5 @@ public class TowerCoreData : ScriptableObject
 
     [Header("Unity Setup Field")]
     public Transform areaOfEffect;
+    public GameObject corePrefab;
 }
