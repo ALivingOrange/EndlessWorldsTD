@@ -33,6 +33,7 @@ public class TowerHeadManager : MonoBehaviour
     [Header("Unity Setup Fields")]
     public Transform partToRotate;
     public Transform Target { get; private set; }
+    public virtual bool RequiresTarget => true;
 
     // function: Initialize
     // Purpose: Assigns parentBase to the towerBase base and gives the head a default orientation (where it's head will rotate when no enemies are nearby).
@@ -72,7 +73,8 @@ public class TowerHeadManager : MonoBehaviour
     // function: Shoot
     // Purpose: Conjures a projectilePrefab. Doing so will call the projectile's separate file to see how to track it.
     //          The projectile will take the transform parameter as the target, and deal the float parameter's worth of damage to it.
-    public void Shoot(Transform target, float damage)
+    //          This function also calculates the spread for multiple projectiles (numOfProjectiles > 1), taking both number of projectiles and angle spread into consideration.
+    public virtual void Shoot(Transform target, float damage)
     {
         if (target == null || headData == null)
         {
@@ -84,16 +86,31 @@ public class TowerHeadManager : MonoBehaviour
             return;
         }
 
-        for (int i = 0; i < headData.numOfProjectiles; i++)
-        {
-            GameObject firedBullet = Instantiate(headData.projectilePrefab, firePoint.position, firePoint.rotation);
+        int projectileCount = headData.numOfProjectiles;
 
-            BulletPhysics bullet = firedBullet.GetComponent<BulletPhysics>();
-            if (bullet != null)
+        if (headData.randomizeProjectileCount)
+        {
+            projectileCount = UnityEngine.Random.Range(headData.minProjectiles, headData.maxProjectiles + 1);
+        }
+
+        Vector2 baseDirection = firePoint.up;
+        float startingAngle = -headData.spreadAngle / 2f;
+
+        float angleStep = projectileCount > 1 ? headData.spreadAngle / (projectileCount - 1) : 0f;
+
+        for (int i = 0; i < projectileCount; i++)
+        {
+            float currentAngle = projectileCount == 1 ? 0f :  startingAngle + (angleStep * i);
+            Vector2 projectileDirection = Quaternion.Euler(0f, 0f, currentAngle) * baseDirection;
+
+            GameObject firedProjectile = Instantiate(headData.projectilePrefab, firePoint.position, Quaternion.identity);
+
+            BulletPhysics projectile = firedProjectile.GetComponent<BulletPhysics>();
+
+            if (projectile != null)
             {
-                bullet.Seek(target, damage);
+                projectile.Seek(projectileDirection, damage);
             }
-        
         }
     }
 }

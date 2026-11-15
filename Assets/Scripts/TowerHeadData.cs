@@ -19,7 +19,16 @@ public class TowerHeadData : ScriptableObject
     public GameObject projectilePrefab;
     public int numOfProjectiles; // This is per shot, not per burst.
 
+    [Header("Random Projectile Settings")]
+    public bool randomizeProjectileCount;
+    public int minProjectiles = 3;
+    public int maxProjectiles = 6;
+
+    [Header("Projectile Spread")]
+    public float spreadAngle = 60f;
+
     [Header("Unity Setup Fields")]
     public float turnSpeed;
+    public GameObject headPrefab;
 
 }
