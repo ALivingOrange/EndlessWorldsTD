@@ -3,9 +3,9 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/8/2026
+*date last modified: 11/14/2026
 *
-*purpose: Contains the physics behind the 'Bullet' Prefab.
+*purpose: Contains the physics behind a majority of projectile prefabs.
 *         Gets the bullet to interact with enemies if they collide.
 *         Causes the bullet to despawn if the bullet hits an enemy or it flies for 5 seconds.
 *
@@ -15,7 +15,7 @@ using UnityEngine;
 
 public class BulletPhysics : MonoBehaviour
 {
-    public float speed = 7f;
+    public float speed = 70f;
     // Passes on the Target found under TowerManager.cs
     private Vector2 direction;
     private float damage;
@@ -24,9 +24,9 @@ public class BulletPhysics : MonoBehaviour
     // Purpose: When called from TowerManager.cs, gives the projectile two pieces of information:
     //          The direction the bullet is being fired.
     //          The data of the firing tower, primarily for baseDamage.
-    public void Seek (Transform currTarget, float dmg)
+    public void Seek (Vector2 firingDirection, float dmg)
     {
-        direction = ((Vector2)currTarget.position - (Vector2)transform.position).normalized;
+        direction = firingDirection.normalized;
         damage = dmg;
     }
 
