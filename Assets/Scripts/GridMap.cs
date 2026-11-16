@@ -54,7 +54,6 @@ public class GridMap : MonoBehaviour
     // which shows how the enemy AI is treating the landscape
     private void OnDrawGizmos() {
         if (grid == null) return;
-        Gizmos.matrix = transform.localToWorldMatrix;
         for(int i = 0; i < width; i++) {
             for(int j = 0; j < height; j++) {
                 // For now, just black or white boxes.
