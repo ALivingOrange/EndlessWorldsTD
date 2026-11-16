@@ -3,7 +3,7 @@
 *author: Ethan Buff
 *class: CS 4700 – Game Development
 *assignment: program 4
-*date last modified: 11/15/2026
+*date last modified: 11/16/2026
 *
 *purpose: Used for enemy AI pathfinding calculation, see FlowField.cs
 * Unity 6 doesn't have a built in min heap so I added a basic one. 

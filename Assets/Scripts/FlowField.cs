@@ -3,7 +3,7 @@
 *author: Ethan Buff
 *class: CS 4700 – Game Development
 *assignment: program 4
-*date last modified: 11/15/2026
+*date last modified: 11/16/2026
 *
 *purpose: Computes one (1) flow field for enemy pathfinding.
 *         Holds the last computed field for future access.

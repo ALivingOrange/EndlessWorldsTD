@@ -24,6 +24,10 @@ public class GridMap : MonoBehaviour
     // AITileGrid has an indexer (allows [x, y]) but it's READ ONLY!
     private AITileGrid grid;
 
+    // TEMP variable: enemy AIs will have their own flow field objects later
+    private FlowField aiFieldCalc;
+    private AI.Direction[,] aiField;
+
     // function: Awake
     // purpose: Called first thing when an object becomes active (or e.g. the scene loads)
     //          Here we make sure the grid is instantiated as valid.
@@ -42,6 +46,12 @@ public class GridMap : MonoBehaviour
                 else grid.SetDifficulty(i, j, Random.Range(1.0f, 3.0f));
             }
         }
+
+        aiFieldCalc = new FlowField(width, height);
+        (int x, int y) goal1 = (32, 32);
+        (int x, int y)[] goals = new (int x, int y)[1];
+        goals[0] = goal1;
+        aiField = aiFieldCalc.Compute(grid, goals);
     }
 
     // function: CellToWorld
@@ -59,7 +69,7 @@ public class GridMap : MonoBehaviour
         return new Vector2Int(Mathf.FloorToInt(coords.x / CELL_SIZE), Mathf.FloorToInt(coords.y / CELL_SIZE));}
 
     // function: OnDrawGizmos
-    // purpose: If Gizmos are enabled, draws an overlay of the Dijkstra grid 
+    // purpose: If Gizmos are enabled, draws an overlay of the AITile grid
     // which shows how the enemy AI is treating the landscape
     private void OnDrawGizmos() {
         if (grid == null) return;
@@ -70,6 +80,15 @@ public class GridMap : MonoBehaviour
                 else if (grid[i, j].GetIsWater()) Gizmos.color = Color.blue;
                 else Gizmos.color = new Color((grid[i, j].GetDifficulty()/3.0f), 0.5f, 0.2f);
                 Gizmos.DrawCube(center: CellToWorld(i, j), size: new Vector3(CELL_SIZE, CELL_SIZE, 0));
+                Gizmos.color = Color.red;
+            }
+        }
+        Gizmos.color = Color.red;
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
+                (int x, int y) directionIntTuple = AI.DirectionHelp.DirToInts(aiField[i, j]);
+                Vector3 direction = new Vector3((float)directionIntTuple.x, (float)directionIntTuple.y, 0);
+                Gizmos.DrawRay(CellToWorld(i, j), direction);
             }
         }
     }
