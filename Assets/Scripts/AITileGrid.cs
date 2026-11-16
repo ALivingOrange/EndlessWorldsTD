@@ -38,4 +38,11 @@ public class AITileGrid
     {
         get { return grid[x, y];}
     }
+
+    // function: Set{Variable}
+    // purpose: Simple setters for tiles
+    public void SetWalkable(int x, int y, bool w) { grid[x, y].SetWalkable(w);}
+    public void SetIsWater(int x, int y, bool isW) { grid[x, y].SetIsWater(isW);}
+    public void SetDifficulty(int x, int y, float d) { grid[x, y].SetDifficulty(d);}
+    
 }

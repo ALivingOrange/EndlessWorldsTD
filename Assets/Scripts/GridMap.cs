@@ -32,8 +32,17 @@ public class GridMap : MonoBehaviour
         grid = new AITileGrid(DEFAULT_WIDTH, DEFAULT_HEIGHT);
         width = DEFAULT_WIDTH;
         height = DEFAULT_HEIGHT;
+        
+        // TEMP: Random map for dijkstra tests
+        Random.InitState(42); // seeded for reproduction
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
+                if ((j > 50) || (j < 14)) grid.SetWalkable(i, j, false);
+                else if ((i > 50) || (i < 14)) grid.SetIsWater(i, j, true);
+                else grid.SetDifficulty(i, j, Random.Range(1.0f, 3.0f));
+            }
+        }
     }
-
 
     // function: CellToWorld
     // purpose: Gives center of a cell as a vector3 corresponding to position transform
