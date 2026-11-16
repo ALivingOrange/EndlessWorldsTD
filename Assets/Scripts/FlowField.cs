@@ -6,10 +6,12 @@
 *date last modified: 11/15/2026
 *
 *purpose: Computes one (1) flow field for enemy pathfinding.
-*         Holds the last computed field for future access.         
+*         Holds the last computed field for future access.
 *
 ****************************************************************/
-using System.Threading.Tasks;
+using System.Collections.Generic;
+// Aliases for readabliity
+using static AI.DirectionHelp;
 
 public class FlowField {
     // AI.Direction is just an enum that can be:
@@ -18,6 +20,7 @@ public class FlowField {
     private int width;
     private int height;
     private bool swims;
+    // C# clone of enum[] is a copy of values, shouldn't permit modifying original
     public AI.Direction[,] GetField() { return (AI.Direction[,])field.Clone();}
 
     public FlowField(int width, int height, bool swims = false)
@@ -33,14 +36,14 @@ public class FlowField {
     private float[,] IntegrateField(AITileGrid tiles, (int x, int y)[] goals)
     {
         // Initialize the integration array with a default value of infinity
-        float[width, height] integration;
+        float[,] integration = new float[width, height];
         for (int i = 0; i < width; i++) {
             for (int j = 0; j < height; j++) {
                 integration[i, j] = float.PositiveInfinity;
             }
         }
 
-        open = new MinHeap(width*height);
+        MinHeap open = new MinHeap(width*height);
 
         // Goals have a cost of 0, you're already there. Calcs start from them.
         foreach ((int x, int y) goal in goals)
@@ -53,104 +56,70 @@ public class FlowField {
         while (open.Count != 0)
         {
             (int cell, float cost) current = open.Pop();
-            int x = cell % width;
-            int y = cell / width;
+            (int x, int y) curCoords = (current.cell % width, current.cell/width);
 
             // If a cell's cost is calculated multiple times, only keep the lowest
-            if (current.cost > integration[x, y]) continue;
+            if (current.cost > integration[curCoords.x, curCoords.y]) continue;
 
-
-            // Handle every direction one by one because I don't wanna figure out the elegant solution
-            // Order: E, NE, N, NW, W, SW, S, SE
-
-            // E (x+1, y)
-            if ((AITileGrid[x+1, y].GetWalkable()) && (this.swims || !(AITileGrid[x+1, y].GetIsWater())))
+            // First we check cardinals, track what's impassable
+            bool[] passableCards = { false, false, false, false};
+            for(int i = 0; i < 4; i++ )
             {
-                cost = integration[x, y] + AITileGrid[x+1, y].GetDifficulty();
-                if (cost < integration[x+1, y])
+                AI.Direction dir = CARDINAL_DIRS[i];
+                (int x, int y) offset = DirToInts(dir);
+
+
+                (int x, int y) neighborCoords = (curCoords.x + offset.x, curCoords.y + offset.y);
+                // skip if out of bounds
+                if(neighborCoords.x >= width || neighborCoords.y >= height) continue;
+                if(neighborCoords.x < 0 || neighborCoords.y < 0) continue;
+
+                // writes to this tile affect copy, not original
+                AITile neighbor = tiles[neighborCoords.x, neighborCoords.y];
+
+                // Passable check: Walkable and must be able to swim if tile is water
+                if(neighbor.GetWalkable() && (!neighbor.GetIsWater() || this.swims))
                 {
-                    integration[x+1, y] = cost;
-                    open.push((x+1+(y*width), cost));
+                    passableCards[i] = true;
+
+                    float cost = integration[curCoords.x, curCoords.y] + neighbor.GetDifficulty();
+                    if(cost < integration[neighborCoords.x, neighborCoords.y]) {
+                        integration[neighborCoords.x, neighborCoords.y] = cost;
+                        open.Push(neighborCoords.x + (neighborCoords.y*width), cost);
+                    }
                 }
             }
 
-            // NE (x+1, y+1)
-            if ((AITileGrid[x+1, y+1].GetWalkable()) && (this.swims || !(AITileGrid[x+1, y+1].GetIsWater())))
+            // Now check ordinals, but they're skipped if both adjacent cardinals are impassable
+            // (because the enemy shouldn't take that path)
+            // This can be changed to either being impassable if enemies cut weird corners.
+            for(int i = 0; i < 4; i++ )
             {
-                // Diagonal directions cost more movement (approximately sqrt 2)
-                cost = integration[x, y] + AITileGrid[x+1, y+1].GetDifficulty()*1.414;
-                if (cost < integration[x+1, y+1])
+                AI.Direction dir = ORDINAL_DIRS[i];
+                (int x, int y) offset = DirToInts(dir);
+
+
+                (int x, int y) neighborCoords = (curCoords.x + offset.x, curCoords.y + offset.y);
+                // skip if out of bounds
+                if(neighborCoords.x >= width || neighborCoords.y >= height) continue;
+                if(neighborCoords.x < 0 || neighborCoords.y < 0) continue;
+                // skip if prev (at i) and next (i + 1, % 4 for the wraparound) cardinals impassable
+                if(!passableCards[i] && !passableCards[(i+1) % 4]) continue;
+
+                // writes to this tile affect copy, not original
+                AITile neighbor = tiles[neighborCoords.x, neighborCoords.y];
+
+                // Passable check: Walkable and must be able to swim if tile is water
+                if(neighbor.GetWalkable() && (!neighbor.GetIsWater() || this.swims))
                 {
-                    integration[x+1, y+1] = cost;
-                    open.push((x+1+((y+1)*width), cost));
+                    float cost = integration[curCoords.x, curCoords.y] + neighbor.GetDifficulty();
+                    if(cost < integration[neighborCoords.x, neighborCoords.y]) {
+                        integration[neighborCoords.x, neighborCoords.y] = cost;
+                        open.Push(neighborCoords.x + (neighborCoords.y*width), cost);
+                    }
                 }
             }
 
-            // N (x, y+1)
-            if ((AITileGrid[x, y+1].GetWalkable()) && (this.swims || !(AITileGrid[x, y+1].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x, y+1].GetDifficulty();
-                if (cost < integration[x, y+1])
-                {
-                    integration[x, y+1] = cost;
-                    open.push((x+((y+1)*width), cost));
-                }
-            }
-
-            // NW (x-1, y+1)
-            if ((AITileGrid[x-1, y+1].GetWalkable()) && (this.swims || !(AITileGrid[x-1, y+1].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x-1, y+1].GetDifficulty()*1.414;
-                if (cost < integration[x-1, y+1])
-                {
-                    integration[x-1, y+1] = cost;
-                    open.push((x-1+((y+1)*width), cost));
-                }
-            }
-
-            // W (x-1, y)
-            if ((AITileGrid[x-1, y].GetWalkable()) && (this.swims || !(AITileGrid[x-1, y].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x-1, y].GetDifficulty();
-                if (cost < integration[x-1, y])
-                {
-                    integration[x-1, y] = cost;
-                    open.push((x-1+(y*width), cost));
-                }
-            }
-
-            // SW (x-1, y-1)
-            if ((AITileGrid[x-1, y-1].GetWalkable()) && (this.swims || !(AITileGrid[x-1, y-1].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x-1, y-1].GetDifficulty()*1.414;
-                if (cost < integration[x-1, y-1])
-                {
-                    integration[x-1, y-1] = cost;
-                    open.push((x-1+((y-1)*width), cost));
-                }
-            }
-
-            // S (x, y-1)
-            if ((AITileGrid[x, y-1].GetWalkable()) && (this.swims || !(AITileGrid[x, y-1].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x, y-1].GetDifficulty();
-                if (cost < integration[x, y-1])
-                {
-                    integration[x, y-1] = cost;
-                    open.push((x+((y-1)*width), cost));
-                }
-            }
-
-            // SE (x+1, y-1)
-            if ((AITileGrid[x+1, y-1].GetWalkable()) && (this.swims || !(AITileGrid[x+1, y-1].GetIsWater())))
-            {
-                cost = integration[x, y] + AITileGrid[x+1, y-1].GetDifficulty()*1.414;
-                if (cost < integration[x+1, y-1])
-                {
-                    integration[x+1, y-1] = cost;
-                    open.push((x+1+((y-1)*width), cost));
-                }
-            }
         }
 
         return integration;
@@ -161,15 +130,13 @@ public class FlowField {
     // purpose: Uses the Dijkstra algorithm reverse-style to create a flow field,
     //          which tells enemies how to traverse.
     //          It updates field and also returns a copy to the caller.
-    //          
+    //
     public AI.Direction[,] Compute(AITileGrid tiles, (int x, int y)[] goals)
     {
-        AI.Direction[width, height] newField;
-        float[width,height] costs = IntegrateField(tiles, goals);
-        for(int i = 0; i < width; i++)
-        {
-            for(int j = 0; j < width; j++)
-            {
+        AI.Direction[,] newField = new AI.Direction[width, height];
+        float[,] costs = IntegrateField(tiles, goals);
+        for(int i = 0; i < width; i++) {
+            for(int j = 0; j < height; j++) {
                 if (costs[i, j] == float.PositiveInfinity) // unreachable/impassable
                 {
                     newField[i, j] = AI.Direction.None;
@@ -178,14 +145,14 @@ public class FlowField {
 
                 (int x, int y) best = (i, j);
 
-                // I think I figured out the elegant way to do it
+                // Unsure if this or the one using more Direction stuff in Integrate is better
                 for(int x = -1; x <= 1; x++) {
                     for(int y = -1; y <= 1; y++) {
                         if(x == 0 && y == 0) continue;
                         if(costs[i+x, j+y] < costs[best.x, best.y]) best = (i+x, j+y);
                     }
-                newField[i, j] = AI.DirectionHelp.IntsToDir(i - best.x, j - best.y);
                 }
+                newField[i, j] = IntsToDir(best.x - i, best.y - j);
             }
         }
         field = newField;

@@ -45,7 +45,7 @@ public class MinHeap
         while (i > 0)
         {
             int parent = (i - 1) / 2;
-            if (_items[i].Cost >= _items[parent].Cost)
+            if (items[i].cost >= items[parent].cost)
                 break;
             Swap(i, parent);
             i = parent;
@@ -54,16 +54,16 @@ public class MinHeap
     
     private void SiftDown(int i)
     {
-        int count = _items.Count;
+        int Count = items.Count;
         while (true)
         {
             int left = 2 * i + 1;
             int right = left + 1;
             int smallest = i;
 
-            if (left < count && _items[left].Cost < _items[smallest].Cost)
+            if (left < Count && items[left].cost < items[smallest].cost)
                 smallest = left;
-            if (right < count && _items[right].Cost < _items[smallest].Cost)
+            if (right < Count && items[right].cost < items[smallest].cost)
                 smallest = right;
             if (smallest == i)
                 break;
@@ -71,5 +71,12 @@ public class MinHeap
             Swap(i, smallest);
             i = smallest;
         }
+    }
+
+    private void Swap(int i, int j)
+    {
+        (int cell, float cost) temp = items[i];
+        items[i] = items[j];
+        items[j] = temp;
     }
 }
