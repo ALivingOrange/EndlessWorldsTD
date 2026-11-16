@@ -1,6 +1,6 @@
 /***************************************************************
 *file: GridMap.cs
-*author: E. Buff
+*author: Ethan Buff
 *class: CS 4700 – Game Development
 *assignment: program 4
 *date last modified: 11/15/2026

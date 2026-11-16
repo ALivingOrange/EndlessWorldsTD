@@ -1,6 +1,6 @@
 /***************************************************************
 *file: AITileGrid.cs
-*author: (FILL THIS IN!)
+*author: Ethan Buff
 *class: CS 4700 – Game Development
 *assignment: program 4
 *date last modified: 11/15/2026
@@ -13,6 +13,9 @@ public class AITileGrid
     private AITile[,] grid;
     private int width;
     private int height;
+
+    public int GetWidth() {return width;}
+    public int GetHeight() {return height;}
 
     // function: AITileGrid Constructor
     // purpose: Creates a grid according to provided parameters
