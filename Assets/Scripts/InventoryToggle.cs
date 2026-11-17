@@ -6,9 +6,9 @@
 * assignment: Endless Worlds TD
 * date last modified: 11/16/2026
 *
-* purpose: Allows the player to open and close the
-* resource inventory using the I key. Hides the
-* resource counter while the inventory is open.
+* purpose: Opens and closes the resource inventory
+* using Unity's Input System. Hides the resource
+* counter while the inventory is open.
 *
 ****************************************************************/
 
@@ -22,6 +22,16 @@ public class InventoryToggle : MonoBehaviour
 
     [SerializeField]
     private GameObject resourceText;
+
+    [SerializeField]
+    private InputAction toggleInventoryAction;
+
+    // function: OnEnable
+    // purpose: Enables the inventory input action.
+    private void OnEnable()
+    {
+        toggleInventoryAction.Enable();
+    }
 
     // function: Start
     // purpose: Hides the inventory panel and displays
@@ -40,20 +50,26 @@ public class InventoryToggle : MonoBehaviour
     }
 
     // function: Update
-    // purpose: Checks if the player presses I to
-    // toggle the inventory menu.
+    // purpose: Checks whether the inventory input
+    // action was pressed.
     private void Update()
     {
-        if (Keyboard.current != null &&
-            Keyboard.current.iKey.wasPressedThisFrame)
+        if (toggleInventoryAction.WasPressedThisFrame())
         {
             toggleInventory();
         }
     }
 
+    // function: OnDisable
+    // purpose: Disables the inventory input action.
+    private void OnDisable()
+    {
+        toggleInventoryAction.Disable();
+    }
+
     // function: toggleInventory
-    // purpose: Opens or closes the inventory panel
-    // and adjusts the resource counter visibility.
+    // purpose: Toggles inventory visibility and
+    // adjusts the resource counter.
     public void toggleInventory()
     {
         if (inventoryPanel == null)

@@ -685,6 +685,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::InventoryToggle
   inventoryPanel: {fileID: 341519928}
   resourceText: {fileID: 2028012411}
+  toggleInventoryAction:
+    m_Name: Toggle Inventory
+    m_Type: 1
+    m_ExpectedControlType: Button
+    m_Id: 782efd78-82b2-48b4-8657-957574ba8253
+    m_Processors: 
+    m_Interactions: 
+    m_SingletonActionBindings:
+    - m_Name: 
+      m_Id: 546a2a10-6b6f-451b-8f31-f0155e1c6fd7
+      m_Path: <Keyboard>/i
+      m_Interactions: 
+      m_Processors: 
+      m_Groups: 
+      m_Action: Toggle Inventory
+      m_Flags: 0
+    m_Flags: 0
+    m_Priority: 0
 --- !u!1 &1269700935
 GameObject:
   m_ObjectHideFlags: 0
