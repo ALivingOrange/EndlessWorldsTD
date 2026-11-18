@@ -1,4 +1,6 @@
 # Worlds
+[↑Index](../../index.md)
+[Technical](../../technical/content/worlds.md)
 
 This document contains a list of all planned worlds and their notable features. _(Replace this sentence with real links)_ Details on specific features, such as tower parts or enemies, can be found in their respective docs.
 

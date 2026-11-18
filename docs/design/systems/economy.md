@@ -1,0 +1,2 @@
+# Economy
+[↑Index](../../index.md)

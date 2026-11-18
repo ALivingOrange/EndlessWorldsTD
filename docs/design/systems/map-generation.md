@@ -1,4 +1,6 @@
 # Map Generation
+[↑Index](../../index.md)
+[Technical](../../technical/systems/map-generation.md)
 
 Maps are procedurally generated with some features to give layouts tactical implications:
 - Terrain difficulty: Score from 1 to 5 (floating point) that determines how long it takes most enemies to traverse it.
