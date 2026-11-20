@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Wood
   m_EditorClassIdentifier: Assembly-CSharp::Resource
   displayName: Wood
-  icon: {fileID: 0}
+  icon: {fileID: 21300000, guid: 507eda94a622bc85692f0863f6ab4c35, type: 3}
