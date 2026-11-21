@@ -19,15 +19,17 @@ public class BulletPhysics : MonoBehaviour
     // Passes on the Target found under TowerManager.cs
     private Vector2 direction;
     private float damage;
+    private DamageType damageType = DamageType.Normal;
 
     // function: Seek
     // Purpose: When called from TowerManager.cs, gives the projectile two pieces of information:
     //          The direction the bullet is being fired.
     //          The data of the firing tower, primarily for baseDamage.
-    public void Seek (Vector2 firingDirection, float dmg)
+    public void Seek (Vector2 firingDirection, float dmg, DamageType type)
     {
         direction = firingDirection.normalized;
         damage = dmg;
+        damageType = type;
     }
 
     // function: Start
@@ -40,10 +42,8 @@ public class BulletPhysics : MonoBehaviour
 
     // function: Update
     // Purpose: Called every frame while the script is active
-    //          Checks to see if there is a target, if not the return
-    //          If there is then we see how close the projectile is to the enemy.
-    //          If the magnitude of the target's position is less than the amount of distance traveled in a frame, call HitTarget and return.
-    //          Else translate the bullet in the direction of the enemy by distanceThisFrame
+    //          Translate the bullet in the direction of the Vector2 class variable.
+    //          Based on speed, Time.deltaTime, and Space.World
     void Update()
     {
         // Moves bullet towards target
@@ -64,6 +64,17 @@ public class BulletPhysics : MonoBehaviour
         }
 
         enemyHealth.TakeDamage(damage);
+
+        if (damageType == DamageType.Ice)
+        { 
+            EnemyElementalEffects effects = enemyHealth.GetComponentInParent<EnemyElementalEffects>();
+
+            if (effects != null)
+            {
+                effects.ApplyFreeze(3f);
+            }
+        }
+
         Destroy(gameObject);
     }
 }
