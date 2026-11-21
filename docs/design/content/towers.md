@@ -1,7 +1,7 @@
 # Towers
 [↑Index](../../index.md)
 
-Towers are the main way to defend yourself from the onslaught of enemies. You can create a tower with three "Tower Parts":
+Towers are the main way to defend yourself from the onslaught of enemies. You can create a tower with three "Tower Parts": 
 Tower Base: As the name implies this is the foundation of our tower. This is the part that determines a tower's health amount, attack range, and field of vision. It also can affect Turn speed multiplicatively.
 Tower Head: This is how the tower damages the enemies. This part as a multitude of functions and data, including:
 ----------- The type of projectile the tower fires, the number of projectiles fired per shot, and the number of shots per burst.
