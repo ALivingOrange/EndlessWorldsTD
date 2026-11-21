@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/21/2026
 *
 *purpose: Allows the Specialty Shockwave Tower Heads to function as intended by the development team
 *         Gives the head attacking abilities that make it differ from normal TowerHeadManager objects. Though it derives from the script
@@ -56,6 +56,6 @@ public class ShockwaveHeadManager : TowerHeadManager
             return;
         }
 
-        shockwave.Initialize(parentBase.currentRange, damage);
+        shockwave.Initialize(parentBase.attachedCore.currAOE, damage, parentBase.attachedCore.currDamageType);
     }
 }
