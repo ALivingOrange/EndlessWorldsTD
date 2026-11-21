@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
+  m_Name: H_Trebuchet_Data
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
+  projectilePrefab: {fileID: 2292402690759639250, guid: d408c90c397246548a81c37bc71b0ce6, type: 3}
+  numOfProjectiles: 1
+  shotsPerBurst: 1
+  baseDamage: 2
+  baseFireInterval: 2.5
+  baseAOE: 3
+  randomizeProjectileCount: 0
+  minProjectiles: 3
+  maxProjectiles: 6
+  spreadAngle: 60
+  turnSpeed: 1
+  headPrefab: {fileID: 3622833596684122020, guid: 96507aa35f4998f46a63bd93e4f8f929, type: 3}
