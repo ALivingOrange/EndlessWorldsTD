@@ -21,7 +21,7 @@ public class InventoryTest : MonoBehaviour
     [SerializeField]
     private Resource ore;
 
-    private ResourceInventory inventory;
+    public static ResourceInventory inventory;
 
     // function: Awake
     // purpose: Gets the ResourceInventory component.
