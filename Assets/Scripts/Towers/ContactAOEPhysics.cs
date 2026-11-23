@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/21/2026
+*date last modified: 11/22/2026
 *
 *purpose: Contains the physics behind the Contact AOE projectiles.
 *         Fires just like a single shot projectile, but on contact it emits an AOE attack, damaging surrounding enemies.
@@ -87,6 +87,7 @@ public class ContactAOEPhysics : MonoBehaviour
     {
         Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(transform.position, aoeRadius);
         HashSet<EnemyHealth> damagedEnemies = new HashSet<EnemyHealth>();
+        EnemyHealth lightningOrigin = null;
 
         foreach (Collider2D nearbyCollider in nearbyColliders)
         {
@@ -98,18 +99,30 @@ public class ContactAOEPhysics : MonoBehaviour
             }
 
             damagedEnemies.Add(enemy);
-
             enemy.TakeDamage(damage);
 
-            if (damageType == DamageType.Ice)
-            { 
-                EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
-
-                if (effects != null)
+            EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
+            if (effects != null)
+            {
+                if (damageType == DamageType.Ice)
                 {
                     effects.ApplyFreeze(3f);
                 }
+                else if (damageType == DamageType.Fire)
+                {
+                    effects.ApplyBurn(3f, 1f);
+                }
+
+                if (damageType == DamageType.Lightning && lightningOrigin == null)
+                {
+                    lightningOrigin = enemy;
+                }
             }
+        }
+
+        if (damageType == DamageType.Lightning && lightningOrigin != null)
+        {
+            ChainLightning.Trigger(lightningOrigin, damage, damagedEnemies);
         }
 
         SpawnExplosionVisual();

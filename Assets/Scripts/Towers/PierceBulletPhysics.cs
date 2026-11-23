@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/21/2026
+*date last modified: 11/22/2026
 *
 *purpose: Contains the physics behind the Piercing projectiles.
 *         Fires just like a single shot projectile, but it can go through as many enemies as its areaOfEffect data says.
@@ -19,12 +19,16 @@ public class PierceBulletPhysics : MonoBehaviour
     [Header("Projectile Attributes")]
     public float speed;
 
+    [Header("Pierce Stats")]
     private Vector2 direction;
     private float damage;
     private int pierceLimit;
+    private int directHits = 0;
+    private HashSet<EnemyHealth> damagedEnemies = new HashSet<EnemyHealth>();
 
-    private HashSet<EnemyHealth> hitEnemies = new HashSet<EnemyHealth>();
+    [Header("Elemental Damage Properties")]
     private DamageType damageType = DamageType.Normal;
+    private bool lightningTriggered = false;
 
     public void Seek(Vector2 firingDirection, float dmg, float pierceAmount, DamageType type)
     {
@@ -63,33 +67,43 @@ public class PierceBulletPhysics : MonoBehaviour
     //          If so, the projectile is destroyed.
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        EnemyHealth enemyHealth = collision.GetComponentInParent<EnemyHealth>();
+        EnemyHealth enemy = collision.GetComponentInParent<EnemyHealth>();
 
-        if (enemyHealth == null)
+        if (enemy == null)
         {
             return;
         }
 
-        if (hitEnemies.Contains(enemyHealth))
+        if (damagedEnemies.Contains(enemy))
         {
             return;
         }
 
-        hitEnemies.Add(enemyHealth);
+        damagedEnemies.Add(enemy);
+        directHits++;
 
-        enemyHealth.TakeDamage(damage);
+        enemy.TakeDamage(damage);
 
-        if (damageType == DamageType.Ice)
+        EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
+        if (effects != null)
         {
-            EnemyElementalEffects effects = enemyHealth.GetComponent<EnemyElementalEffects>();
-
-            if (effects != null)
+            if (damageType == DamageType.Ice)
             {
                 effects.ApplyFreeze(3f);
             }
+            else if (damageType == DamageType.Fire)
+            {
+                effects.ApplyBurn(3f, 1f);
+            }
         }
 
-        if (hitEnemies.Count >= pierceLimit)
+        if (damageType == DamageType.Lightning && !lightningTriggered)
+        { 
+            lightningTriggered = true;
+            ChainLightning.Trigger(enemy, damage, damagedEnemies);
+        }
+
+        if (directHits >= pierceLimit)
         {
             Destroy(gameObject);
         }

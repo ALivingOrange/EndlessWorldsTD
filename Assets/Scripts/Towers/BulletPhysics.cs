@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/22/2026
 *
 *purpose: Contains the physics behind a majority of projectile prefabs.
 *         Gets the bullet to interact with enemies if they collide.
@@ -56,22 +56,31 @@ public class BulletPhysics : MonoBehaviour
     //          If not it'll fly until Start() gets to it.
     void OnTriggerEnter2D(Collider2D collision)
     {
-        EnemyHealth enemyHealth = collision.GetComponentInParent<EnemyHealth>();
+        EnemyHealth enemy = collision.GetComponentInParent<EnemyHealth>();
 
-        if (enemyHealth == null)
+        if (enemy == null)
         {
             return;
         }
 
-        enemyHealth.TakeDamage(damage);
+        enemy.TakeDamage(damage);
 
-        if (damageType == DamageType.Ice)
-        { 
-            EnemyElementalEffects effects = enemyHealth.GetComponentInParent<EnemyElementalEffects>();
+        EnemyElementalEffects effects = enemy.GetComponentInParent<EnemyElementalEffects>();
 
-            if (effects != null)
+        if (effects != null)
+        {
+            if (damageType == DamageType.Ice)
             {
                 effects.ApplyFreeze(3f);
+            }
+            else if (damageType == DamageType.Fire)
+            {
+                effects.ApplyBurn(3f, 1f);
+            }
+
+            if (damageType == DamageType.Lightning)
+            {
+                ChainLightning.Trigger(enemy, damage);
             }
         }
 
