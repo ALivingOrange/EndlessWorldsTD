@@ -84,9 +84,17 @@ public class TowerCoreManager : MonoBehaviour
             fireCountdown -= Time.deltaTime;
         }
 
-        if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
+        if (parentBase.attachedHead.RequiresTarget)
         {
-            return;
+            if (parentBase.Target == null)
+            {
+                return;
+            }
+
+            if (!parentBase.attachedHead.IsFacingTarget())
+            {
+                return;
+            }
         }
 
         if (fireCountdown <= 0f)
@@ -94,8 +102,6 @@ public class TowerCoreManager : MonoBehaviour
             StartCoroutine(FireBurst());
             fireCountdown = MathF.Max(0.01f, currFireInterval);
         }
-
-        fireCountdown -= Time.deltaTime;
     }
 
     // function: FireBurst()
@@ -113,14 +119,22 @@ public class TowerCoreManager : MonoBehaviour
                 yield break;
             }
 
-            if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
+            if (parentBase.attachedHead == null)
             {
                 yield break;
             }
 
-            if (parentBase.attachedHead == null)
+            if (parentBase.attachedHead.RequiresTarget)
             {
-                yield break;
+                if (parentBase.Target == null)
+                {
+                    yield break;
+                }
+
+                if (!parentBase.attachedHead.IsFacingTarget())
+                {
+                    yield break;
+                }
             }
             
             parentBase.attachedHead.Shoot(parentBase.Target, currDamage);

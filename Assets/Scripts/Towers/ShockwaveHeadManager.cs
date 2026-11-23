@@ -23,6 +23,7 @@ public class ShockwaveHeadManager : TowerHeadManager
     //          Once the script knows the shockwave has all requirements, it calls Initialize()
     public override void Shoot(Transform target, float damage)
     {
+
         if (parentBase == null || headData == null || headData.projectilePrefab == null)
         {
             Debug.LogWarning("Shockwave Head is missing required references");
@@ -30,7 +31,7 @@ public class ShockwaveHeadManager : TowerHeadManager
         }
 
         // Checking to see if enemies are nearby
-        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(parentBase.transform.position, parentBase.currentRange);
+        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(parentBase.transform.position, parentBase.attachedCore.currAOE);
         bool enemyNearby = false;
         foreach (Collider2D collider in nearbyColliders)
         {

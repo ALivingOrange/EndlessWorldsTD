@@ -61,6 +61,11 @@ public class TowerHeadManager : MonoBehaviour
             return;
         }
 
+        if (!RequiresTarget)
+        {
+            return;
+        }
+
         float effectiveTurnSpeed = headData.turnSpeed * parentBase.baseData.turnSpeedModifier;
         if (parentBase.Target == null)
         {
@@ -74,6 +79,23 @@ public class TowerHeadManager : MonoBehaviour
         Quaternion lookRotation = Quaternion.Euler(new Vector3(0, 0, angle + offset));
 
         partToRotate.rotation = Quaternion.RotateTowards(partToRotate.rotation, lookRotation, effectiveTurnSpeed * Time.deltaTime * 50f);
+    }
+
+    // function: Shoot
+    // Purpose: Checks to see if the tower head is facing at most 5 degrees away from the nearest enemy.
+    public bool IsFacingTarget()
+    {
+        if (parentBase == null || parentBase.Target == null || partToRotate == null)
+        { 
+            return false;
+        }
+
+        Vector2 direction = parentBase.Target.position - partToRotate.position;
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
+        float angleDifference = Quaternion.Angle(partToRotate.rotation, targetRotation);
+
+        return angleDifference <= 5f;
     }
 
     // function: Shoot
