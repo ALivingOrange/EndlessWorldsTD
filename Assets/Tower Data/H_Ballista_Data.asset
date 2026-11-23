@@ -17,7 +17,7 @@ MonoBehaviour:
   shotsPerBurst: 1
   baseDamage: 1.25
   baseFireInterval: 1.5
-  baseAOE: 5
+  baseAOE: 4
   randomizeProjectileCount: 0
   minProjectiles: 3
   maxProjectiles: 6
