@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/20/2026
+*date last modified: 11/22/2026
 *
 *purpose: Contains the physics behind immediate AOE projectiles.
 *         Allows the unique projectile to scale up from the center of the tower head and deal damage to any enemies around it.
@@ -35,7 +35,9 @@ public class ShockwavePhysics : MonoBehaviour
     public LineRenderer shockwaveLine;
     public int circleSegments = 64;
 
+    [Header("Element Damage Properties")]
     private DamageType damageType = DamageType.Normal;
+    private bool lightningTriggered = false;
 
     // function: Initialize
     // Purpose: Gives values to maxRadius and damage, and makes initialized true.
@@ -102,14 +104,23 @@ public class ShockwavePhysics : MonoBehaviour
 
                 enemy.TakeDamage(damage);
 
-                if (damageType == DamageType.Ice)
+                EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
+                if (effects != null)
                 {
-                    EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
-
-                    if (effects != null)
+                    if (damageType == DamageType.Ice)
                     {
                         effects.ApplyFreeze(3f);
                     }
+                    else if (damageType == DamageType.Fire)
+                    {
+                        effects.ApplyBurn(3f, 1f);
+                    }
+                }
+
+                if (damageType == DamageType.Lightning && !lightningTriggered)
+                {
+                    lightningTriggered = true;
+                    ChainLightning.Trigger(enemy, damage, damagedEnemies);
                 }
             }
         }

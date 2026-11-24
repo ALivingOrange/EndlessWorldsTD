@@ -6,20 +6,31 @@
 *date last modified: 11/21/2026
 *
 *purpose: This is how enemies are affected by elemental damage types.
-*         Made in a seperate script to make this more universal.
+*         Made in a separate script to make this more universal.
 *
 ****************************************************************/
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyElementalEffects : MonoBehaviour
 {
+    [Header("Freeze Status Variables")]
     public bool IsFrozen { get; private set; }
     private float freezeTimer;
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
+    [Header("Burn Status Variables")]
+    public bool IsBurning { get; private set; }
+    private float burnTimer;
+    private float burnTickTimer;
+    private float burnDamagePerTick;
+    private EnemyHealth enemyHealth;
+
+    // function: Start
+    // Purpose: Called on the frame when this script is enabled.
+    //          Gives the variable enemyHealth it's EnemyHealth component.
     void Start()
     {
-
+        enemyHealth = GetComponent<EnemyHealth>();
     }
 
     // function: Update
@@ -27,17 +38,39 @@ public class EnemyElementalEffects : MonoBehaviour
     //          Calls other functions accordingly.
     void Update()
     {
-        if (!IsFrozen)
+        // Checks if Frozen
+        if (IsFrozen)
         {
-            return;
+            freezeTimer -= Time.deltaTime;
+
+            if (freezeTimer <= 0f)
+            {
+                IsFrozen = false;
+                freezeTimer = 0f;
+            }
         }
 
-        freezeTimer -= Time.deltaTime;
 
-        if (freezeTimer <= 0f)
+        if (IsBurning)
         {
-            IsFrozen = false;
-            freezeTimer = 0f;
+            burnTimer -= Time.deltaTime;
+            burnTickTimer -= Time.deltaTime;
+
+            if(burnTickTimer <= 0f)
+            {
+                if (enemyHealth != null)
+                {
+                    enemyHealth.TakeDamage(burnDamagePerTick);
+                }
+
+                burnTickTimer += 1f;
+            }
+
+            if (burnTimer <= 0f)
+            {
+                IsBurning = false;
+                burnTimer = 0f;
+            }
         }
     }
 
@@ -52,5 +85,18 @@ public class EnemyElementalEffects : MonoBehaviour
 
         IsFrozen = true;
         freezeTimer = Mathf.Max(freezeTimer, duration);
+    }
+
+    public void ApplyBurn(float duration, float damagePerTick)
+    {
+        if (duration <= 0f || damagePerTick <= 0f || IsBurning)
+        {
+            return;
+        }
+
+        IsBurning = true;
+        burnTimer = duration;
+        burnTickTimer = 1f;
+        burnDamagePerTick = damagePerTick;
     }
 }

@@ -16,11 +16,11 @@ MonoBehaviour:
   numOfProjectiles: 1
   shotsPerBurst: 1
   baseDamage: 1.5
-  baseFireInterval: 2
-  baseAOE: 6
+  baseFireInterval: 1.5
+  baseAOE: 10
   randomizeProjectileCount: 0
   minProjectiles: 3
   maxProjectiles: 6
   spreadAngle: 60
-  turnSpeed: 0
+  turnSpeed: 100
   headPrefab: {fileID: 6760826542085223097, guid: cd256bdad31d3c847bfaefa99bc57495, type: 3}

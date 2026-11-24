@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Ice_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
-  damageModifier: 0.9
+  damageModifier: 0.5
   fireIntervalModifier: 1.2
   areaOfEffectModifier: 1.5
   damageType: 1
