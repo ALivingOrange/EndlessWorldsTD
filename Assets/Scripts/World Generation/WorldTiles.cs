@@ -47,7 +47,7 @@ public class WorldTiles
                 difficulty = 1.5f;
                 break;
             case TerrainType.Water:
-                walkable = false;
+                walkable = true;
                 isWater = true;
                 difficulty = 3.0f;
                 break;
