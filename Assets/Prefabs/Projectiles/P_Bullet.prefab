@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BulletPhysics
   speed: 70
+  timeToDespawn: 1
 --- !u!58 &1901507957759336559
 CircleCollider2D:
   m_ObjectHideFlags: 0

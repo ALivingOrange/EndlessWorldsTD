@@ -172,3 +172,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PierceBulletPhysics
   speed: 70
+  timeToDespawn: 3

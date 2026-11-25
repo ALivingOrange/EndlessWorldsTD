@@ -108,6 +108,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ContactAOEPhysics
   speed: 70
+  timeToDespawn: 5
   explosionVisualPrefab: {fileID: 7963148594996843823, guid: e5a62634aa1d3084e917994eee96c794, type: 3}
   circleSegments: 64
   effectDuration: 0.3
