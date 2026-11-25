@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/22/2026
+*date last modified: 11/24/2026
 *
 *purpose: Contains the physics behind a majority of projectile prefabs.
 *         Gets the bullet to interact with enemies if they collide.
@@ -15,7 +15,9 @@ using UnityEngine;
 
 public class BulletPhysics : MonoBehaviour
 {
+    [Header("Attributes")]
     public float speed = 70f;
+    public float timeToDespawn = 5f;
     // Passes on the Target found under TowerManager.cs
     private Vector2 direction;
     private float damage;
@@ -37,7 +39,7 @@ public class BulletPhysics : MonoBehaviour
     //          Destroy any bullets that last at least 5 seconds flying.
     void Start()
     {
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, timeToDespawn);
     }
 
     // function: Update

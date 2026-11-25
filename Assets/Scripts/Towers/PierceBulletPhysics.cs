@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/22/2026
+*date last modified: 11/24/2026
 *
 *purpose: Contains the physics behind the Piercing projectiles.
 *         Fires just like a single shot projectile, but it can go through as many enemies as its areaOfEffect data says.
@@ -17,7 +17,8 @@ using UnityEngine;
 public class PierceBulletPhysics : MonoBehaviour
 {
     [Header("Projectile Attributes")]
-    public float speed;
+    public float speed = 70f;
+    public float timeToDespawn = 5f;
 
     [Header("Pierce Stats")]
     private Vector2 direction;
@@ -47,7 +48,7 @@ public class PierceBulletPhysics : MonoBehaviour
     //          Destroy any bullets that last at least 5 seconds flying.
     void Start()
     {
-        Destroy(gameObject, 5f);
+        Destroy(gameObject, timeToDespawn);
     }
 
 
