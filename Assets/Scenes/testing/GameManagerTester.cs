@@ -77,13 +77,29 @@ public class GameManagerTester : MonoBehaviour
             GameManager.Instance.TestEnterPlayState();
         }
 
+        // Press F to transition scenes
+        if (Keyboard.current != null && Keyboard.current.fKey.wasPressedThisFrame)
+        {
+            TestSceneTransition();
+        }
 
     }
+
+    // log current state
     private void LogStateChange(GameState newState)
     {
         Debug.Log("TEST: Game state is now " + newState);
     }
 
 
+    // function: TestSceneTransition
+    // purpose: Tests whether GameManager persists between scenes.
+    public void TestSceneTransition()
+    {
+        Debug.Log("GameManager before transition: " +
+                  GameManager.Instance.GetEntityId());
+
+        UnityEngine.SceneManagement.SceneManager.LoadScene("EnemyAITestWorld");
+    }
 
 }

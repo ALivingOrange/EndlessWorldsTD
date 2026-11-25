@@ -50,6 +50,20 @@ public class GameManager : MonoBehaviour
 
 
 
+    // function: InitializeGameManager
+    // purpose: Creates GameManager automatically when game starts, regardless of scene.
+    [RuntimeInitializeOnLoadMethod(
+        RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitializeGameManager()
+    {
+        if (Instance != null)
+            return;
+
+        GameObject managerObject = new GameObject("GameManager");
+        managerObject.AddComponent<GameManager>();
+    }
+
+
 
     // function: Awake
     // purpose: Ensures that only one GameManager exists and keeps it
@@ -91,12 +105,17 @@ public class GameManager : MonoBehaviour
         OnGameStateChanged?.Invoke(CurrentState);
     }
 
+
+
+    // only added for testing
 #if UNITY_EDITOR
     public void TestEnterPlayState()
     {
         ChangeState(GameState.Play);
     }
 #endif
+
+
 
     // function: LoadMainMenu
     // purpose: Loads the main menu scene.
