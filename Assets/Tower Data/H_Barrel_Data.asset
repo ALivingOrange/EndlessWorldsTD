@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
   m_Name: H_Barrel_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
-  projectilePrefab: {fileID: 8740157660836404584, guid: e8c036a1a890261458946fb602ba51db, type: 3}
+  projectilePrefab: {fileID: 506943071201249549, guid: 73e2829a1cc399645b58040b2d9a0eed, type: 3}
   numOfProjectiles: 1
   shotsPerBurst: 1
   baseDamage: 1
