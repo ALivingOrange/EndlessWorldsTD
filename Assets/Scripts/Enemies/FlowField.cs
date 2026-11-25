@@ -143,14 +143,55 @@ public class FlowField {
                     continue;
                 }
 
+                // Best should always track cheapest tile to move from here to
                 (int x, int y) best = (i, j);
+                float bestCost = costs[i, j];
 
-                // Unsure if this or the one using more Direction stuff in Integrate is better
-                for(int x = -1; x <= 1; x++) {
-                    for(int y = -1; y <= 1; y++) {
-                        if(x == 0 && y == 0) continue;
-                        if(costs[i+x, j+y] < costs[best.x, best.y]) best = (i+x, j+y);
+                // Similar to integration, check Cardinals then valid Ordinals
+                bool[] passableCards = { false, false, false, false};
+                for(int c = 0; c < 4; c++ )
+                {
+                    AI.Direction dir = CARDINAL_DIRS[c];
+                    (int x, int y) offset = DirToInts(dir);
+
+                    (int x, int y) neighborCoords = (i + offset.x, j + offset.y);
+                    // skip if out of bounds
+                    if(neighborCoords.x >= width || neighborCoords.y >= height) continue;
+                    if(neighborCoords.x < 0 || neighborCoords.y < 0) continue;
+
+                    float curCost = costs[neighborCoords.x, neighborCoords.y];
+                    if(curCost == float.PositiveInfinity) continue;
+                    passableCards[c] = true;
+
+                    if(curCost < bestCost)
+                    {
+                        bestCost = curCost;
+                        best = (i+offset.x, j+offset.y);
                     }
+                }
+
+                for(int c = 0; c < 4; c++)
+                {
+                    AI.Direction dir = ORDINAL_DIRS[c];
+                    (int x, int y) offset = DirToInts(dir);
+
+                    (int x, int y) neighborCoords = (i + offset.x, j + offset.y);
+                    // skip if out of bounds
+                    if(neighborCoords.x >= width || neighborCoords.y >= height) continue;
+                    if(neighborCoords.x < 0 || neighborCoords.y < 0) continue;
+                    // skip if both adjacent cardinals impassable
+                    if(!passableCards[c] && !passableCards[(c+1) % 4]) continue;
+
+                    float curCost = costs[neighborCoords.x, neighborCoords.y];
+                    if(curCost == float.PositiveInfinity) continue;
+
+                    if(curCost < bestCost)
+                    {
+                        bestCost = curCost;
+                        best = (i+offset.x, j+offset.y);
+                    }
+
+
                 }
                 newField[i, j] = IntsToDir(best.x - i, best.y - j);
             }
