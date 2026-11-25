@@ -1,5 +1,5 @@
 /***************************************************************
-*file: EnemyManager.cs
+*file: DebugOrbitMovement.cs
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
@@ -13,7 +13,7 @@ using System;
 using System.Runtime.CompilerServices;
 using UnityEngine;
 
-public class EnemyManager : MonoBehaviour
+public class DebugOrbitMovement : MonoBehaviour
 {
     private Vector3 pivotPoint = Vector3.zero;
     private float speed = 0.5f;

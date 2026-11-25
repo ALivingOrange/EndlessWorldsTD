@@ -24,7 +24,7 @@ public class GridMap : MonoBehaviour
     // AITileGrid has an indexer (allows [x, y]) but it's READ ONLY!
     private AITileGrid grid;
 
-    // TEMP variable: enemy AIs will have their own flow field objects later
+    // TEMP variable: enemy AI types will have their own flow field objects later
     private FlowField aiFieldCalc;
     private AI.Direction[,] aiField;
 
