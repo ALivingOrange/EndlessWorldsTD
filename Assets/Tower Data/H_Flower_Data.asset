@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
+  m_Name: H_Flower_Data
+  m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
+  projectilePrefab: {fileID: 506943071201249549, guid: 73e2829a1cc399645b58040b2d9a0eed, type: 3}
+  numOfProjectiles: 11
+  shotsPerBurst: 3
+  baseDamage: 1
+  baseFireInterval: 3
+  baseAOE: 2
+  randomizeProjectileCount: 0
+  minProjectiles: 3
+  maxProjectiles: 6
+  spreadAngle: 360
+  turnSpeed: 50
+  headPrefab: {fileID: 3792186392251022720, guid: cc3339bd44b89f04d8a331e79f216194, type: 3}
