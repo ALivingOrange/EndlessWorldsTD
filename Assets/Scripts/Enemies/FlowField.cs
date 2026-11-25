@@ -23,6 +23,12 @@ public class FlowField {
     // C# clone of enum[] is a copy of values, shouldn't permit modifying original
     public AI.Direction[,] GetField() { return (AI.Direction[,])field.Clone();}
 
+    public AI.Direction DirectionAt(int x, int y)
+    {
+        if(x < width && y < height && x >= 0 && y >= 0) return field[x, y];
+        else return AI.Direction.None;
+    }
+
     public FlowField(int width, int height, bool swims = false)
     {
         this.width = width;

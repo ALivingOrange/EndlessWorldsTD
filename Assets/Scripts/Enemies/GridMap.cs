@@ -9,6 +9,7 @@
 *         engine stuff. [Needs a better description]
 ****************************************************************/
 using UnityEngine;
+using System.Collections.Generic;
 
 public class GridMap : MonoBehaviour
 {
@@ -21,12 +22,12 @@ public class GridMap : MonoBehaviour
     private int width;
     private int height;
 
+    // This being serialized is TEMPorary, should be made on world creation
+    [SerializeField] private EnemyData[] enemyTypes;
+    private Dictionary<string, FlowField> aiFields;
+
     // AITileGrid has an indexer (allows [x, y]) but it's READ ONLY!
     private AITileGrid grid;
-
-    // TEMP variable: enemy AI types will have their own flow field objects later
-    private FlowField aiFieldCalc;
-    private AI.Direction[,] aiField;
 
     // function: Awake
     // purpose: Called first thing when an object becomes active (or e.g. the scene loads)
@@ -47,11 +48,17 @@ public class GridMap : MonoBehaviour
             }
         }
 
-        aiFieldCalc = new FlowField(width, height);
-        (int x, int y) goal1 = (32, 32);
+        // TEMP: Goal of 31, 31 only
+        (int x, int y) goal1 = (31, 31);
         (int x, int y)[] goals = new (int x, int y)[1];
         goals[0] = goal1;
-        aiField = aiFieldCalc.Compute(grid, goals);
+
+        aiFields = new Dictionary<string, FlowField>();
+        foreach(EnemyData enemy in enemyTypes)
+        {
+            aiFields.Add(enemy.name, new FlowField(width, height, enemy.swims));
+            aiFields[enemy.name].Compute(grid, goals);
+        }
     }
 
     // function: CellToWorld
@@ -68,6 +75,15 @@ public class GridMap : MonoBehaviour
     public Vector2Int WorldToCell(Vector3 coords) {
         return new Vector2Int(Mathf.FloorToInt(coords.x / CELL_SIZE), Mathf.FloorToInt(coords.y / CELL_SIZE));}
 
+
+    public FlowField GetFlowField(string name) { return aiFields[name]; }
+
+    public float DifficultyAt(int x, int y) {
+
+        if(x < width && y < height && x >= 0 && y >= 0) return grid[x, y].GetDifficulty();
+        else return float.PositiveInfinity;
+    }
+
     // function: OnDrawGizmos
     // purpose: If Gizmos are enabled, draws an overlay of the AITile grid
     // which shows how the enemy AI is treating the landscape
@@ -81,14 +97,6 @@ public class GridMap : MonoBehaviour
                 else Gizmos.color = new Color((grid[i, j].GetDifficulty()/3.0f), 0.5f, 0.2f);
                 Gizmos.DrawCube(center: CellToWorld(i, j), size: new Vector3(CELL_SIZE, CELL_SIZE, 0));
                 Gizmos.color = Color.red;
-            }
-        }
-        Gizmos.color = Color.red;
-        for(int i = 0; i < width; i++) {
-            for(int j = 0; j < height; j++) {
-                (int x, int y) directionIntTuple = AI.DirectionHelp.DirToInts(aiField[i, j]);
-                Vector3 direction = new Vector3((float)directionIntTuple.x, (float)directionIntTuple.y, 0);
-                Gizmos.DrawRay(CellToWorld(i, j), direction);
             }
         }
     }
