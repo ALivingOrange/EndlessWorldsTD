@@ -38,7 +38,7 @@ public class EnemyMovement : MonoBehaviour
         Vector2Int coords = gridMap.WorldToCell(this.transform.position);
         (int x, int y) dirI = AI.DirectionHelp.DirToInts(flowField.DirectionAt(coords[0], coords[1]));
         Vector2 direction = new Vector2(0.0f + (float)dirI.x, 0.0f + (float)dirI.y);
-        float speed = 1/gridMap.DifficultyAt(coords.x, coords.y);
-        rb.linearVelocity = direction * speed;
+        float speedMod = 1/gridMap.DifficultyAt(coords.x, coords.y);
+        rb.linearVelocity = direction * enemyData.speed *speedMod;
     }
 }

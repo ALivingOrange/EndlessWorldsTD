@@ -25,16 +25,20 @@ public class WorldBounds
     }
 
     //Gets the bottom left corner of the map
+    // TEMP: From Ethan. I'm making this 0 to agree with AI stuff
+    //       Josh should be redoing things to work ith 0 later
     public Vector2 Min{
         get{
-            return new Vector2(-width / 2f, -height / 2f);
+            return new Vector2(0.0f, 0.0f);
         }
     }
 
     //Gets the top right corner of the map
+    // TEMP: From Ethan. I'm changing this to agree with AI stuff
+    //       Josh should be redoing things to work ith 0 later
     public Vector2 Max{
         get{
-            return new Vector2(width / 2f, height / 2f);
+            return new Vector2(width, height);
         }
     }
 

@@ -118,7 +118,8 @@ public class FlowField {
                 // Passable check: Walkable and must be able to swim if tile is water
                 if(neighbor.GetWalkable() && (!neighbor.GetIsWater() || this.swims))
                 {
-                    float cost = integration[curCoords.x, curCoords.y] + neighbor.GetDifficulty();
+                    // Ordinals (diagonal) cost sqrt2 (approx 1.414) times as much
+                    float cost = integration[curCoords.x, curCoords.y] + (neighbor.GetDifficulty() * 1.414f);
                     if(cost < integration[neighborCoords.x, neighborCoords.y]) {
                         integration[neighborCoords.x, neighborCoords.y] = cost;
                         open.Push(neighborCoords.x + (neighborCoords.y*width), cost);

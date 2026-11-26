@@ -16,6 +16,9 @@ using UnityEngine;
 
 public class WorldGeneration : MonoBehaviour
 {
+    public event System.Action Generated;
+
+
     public WorldBounds WorldBounds = new WorldBounds(500f, 500f);
     public float tileSize = 5f;
 
@@ -33,6 +36,8 @@ public class WorldGeneration : MonoBehaviour
     private WorldTiles[,] tileGrid;
     private int columns;
     private int rows;
+    public int Columns => columns;
+    public int Rows => rows;
     public IReadOnlyList<WorldTiles> Tiles => tiles;
     public float TileSize => tileSize;
 
@@ -63,6 +68,8 @@ public class WorldGeneration : MonoBehaviour
         }
         Debug.Log("Map has successfully generated!");   //Message that prints out to ensure it works
         Debug.Log("Total tiles generated: " + tiles.Count);
+
+        Generated?.Invoke();
     }
 
     private void CreateGrid(){

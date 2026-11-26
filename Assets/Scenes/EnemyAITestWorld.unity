@@ -224,7 +224,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 454916351}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 336577d2d7624cca9908913e7f082066, type: 3}
   m_Name: 
@@ -305,11 +305,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2448139724291621415, guid: 2107febaedb6855c4ba9f7d29c5f1e12, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.06357857
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2448139724291621415, guid: 2107febaedb6855c4ba9f7d29c5f1e12, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.87193465
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2448139724291621415, guid: 2107febaedb6855c4ba9f7d29c5f1e12, type: 3}
       propertyPath: m_NormalizedViewPortRect.height
@@ -364,6 +364,60 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2107febaedb6855c4ba9f7d29c5f1e12, type: 3}
+--- !u!1 &584565213
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 584565214}
+  - component: {fileID: 584565215}
+  m_Layer: 0
+  m_Name: WorldGeneration
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &584565214
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584565213}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1574983489}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &584565215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 584565213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96ebc4bfad6ed9447864d8b4e8849af9, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::WorldGeneration
+  WorldBounds:
+    width: 500
+    height: 500
+  tileSize: 5
+  seed: 1111111
+  randomSeed: 0
+  waterGeneration: 0.3
+  roughGeneration: 0.58
+  cliffGeneration: 0.78
+  smoothing: 2
 --- !u!1 &1574983488
 GameObject:
   m_ObjectHideFlags: 0
@@ -395,6 +449,7 @@ Transform:
   m_Children:
   - {fileID: 1676216522}
   - {fileID: 454916352}
+  - {fileID: 584565214}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1676216521
@@ -441,11 +496,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 38fce958b8ba2147b86c218ed2355949, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GridMap
-  DEFAULT_WIDTH: 64
-  DEFAULT_HEIGHT: 64
-  CELL_SIZE: 1
   enemyTypes:
   - {fileID: 11400000, guid: 236fc8df9b4e51f51bd94aec912bda62, type: 2}
+  world: {fileID: 584565215}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

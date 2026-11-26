@@ -16,4 +16,5 @@ public class EnemyData : ScriptableObject
 {
     public string name;
     public bool swims;
+    public float speed;
 }
