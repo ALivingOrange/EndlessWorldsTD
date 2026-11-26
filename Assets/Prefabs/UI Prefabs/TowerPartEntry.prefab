@@ -217,6 +217,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerPartEntryUI
   partName: {fileID: 3510561030857994660}
   partCost: {fileID: 9013263507672259429}
+  partOwned: {fileID: 5919366977472813846}
   craftButton: {fileID: 6814580258697939146}
   detailsButton: {fileID: 4073642093039972513}
 --- !u!114 &7531696519451915940
