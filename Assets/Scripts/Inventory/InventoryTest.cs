@@ -40,8 +40,8 @@ public class InventoryTest : MonoBehaviour
             return;
         }
 
-        inventory.addResource(wood, 20);
-        inventory.addResource(ore, 15);
+        inventory.addResource(wood, 100);
+        inventory.addResource(ore, 100);
 
         Debug.Log("Wood after collecting: " +
             inventory.getResource(wood));

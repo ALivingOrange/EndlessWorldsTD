@@ -4,11 +4,10 @@
 * author: Dylan Diaz
 * class: CS 4700 - Game Development
 * assignment: Endless Worlds TD
-* date last modified: 11/21/2026
+* date last modified: 11/25/2026
 *
-* purpose: Controls the tower part details panel
-* and displays the appropriate stat labels
-* for bases, cores, and heads.
+* purpose: Displays actual tower part attributes
+* from the tower data ScriptableObjects.
 *
 ****************************************************************/
 
@@ -34,43 +33,58 @@ public class PartDetailsUI : MonoBehaviour
     }
 
     // function: showBaseDetails
-    // purpose: Displays placeholder stats for a tower base.
-    public void showBaseDetails(string partName)
+    // purpose: Displays the selected base's attributes.
+    public void showBaseDetails(TowerBaseData data)
     {
-        showDetails(
-            partName,
-            "Health: TBD\n" +
-            "Attack Range: TBD\n" +
-            "Vision Angle: TBD"
-        );
+        if (data == null)
+        {
+            return;
+        }
+
+        string stats =
+            "Health: " + data.health + "\n" +
+            "Attack Range: " + data.attackRange + "\n" +
+            "Vision Angle: " + data.visionAngle;
+
+        showDetails(data.getDisplayName(), stats);
     }
 
     // function: showCoreDetails
-    // purpose: Displays placeholder stats for a tower core.
-    public void showCoreDetails(string partName)
+    // purpose: Displays the selected core's attributes.
+    public void showCoreDetails(TowerCoreData data)
     {
-        showDetails(
-            partName,
-            "Damage: TBD\n" +
-            "Fire Interval: TBD\n" +
-            "Shots Per Burst: TBD"
-        );
+        if (data == null)
+        {
+            return;
+        }
+
+        string stats =
+            "Damage: " + data.damage + "\n" +
+            "Fire Interval: " + data.fireInterval + "s\n" +
+            "Shots Per Burst: " + data.shotsPerBurst;
+
+        showDetails(data.getDisplayName(), stats);
     }
 
     // function: showHeadDetails
-    // purpose: Displays placeholder stats for a tower head.
-    public void showHeadDetails(string partName)
+    // purpose: Displays the selected head's attributes.
+    public void showHeadDetails(TowerHeadData data)
     {
-        showDetails(
-            partName,
-            "Projectile Count: TBD\n" +
-            "Spread Angle: TBD\n" +
-            "Turn Speed: TBD"
-        );
+        if (data == null)
+        {
+            return;
+        }
+
+        string stats =
+            "Projectile Count: " + data.numOfProjectiles + "\n" +
+            "Spread Angle: " + data.spreadAngle + "\n" +
+            "Turn Speed: " + data.turnSpeed;
+
+        showDetails(data.getDisplayName(), stats);
     }
 
     // function: showDetails
-    // purpose: Updates the details text and opens the panel.
+    // purpose: Updates and opens the details panel.
     private void showDetails(string partName, string stats)
     {
         if (detailsTitle != null)
@@ -90,7 +104,7 @@ public class PartDetailsUI : MonoBehaviour
     }
 
     // function: closeDetails
-    // purpose: Hides the tower part details panel.
+    // purpose: Hides the details panel.
     public void closeDetails()
     {
         if (detailsPanel != null)

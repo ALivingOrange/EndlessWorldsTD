@@ -13,7 +13,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TowerHeadData", menuName = "Scriptable Objects/TowerHeadData")]
-public class TowerHeadData : ScriptableObject
+public class TowerHeadData : TowerPartData
 {
     [Header("Attributes")]
     public GameObject projectilePrefab;

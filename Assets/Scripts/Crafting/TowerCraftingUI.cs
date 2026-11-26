@@ -17,7 +17,7 @@ using UnityEngine;
 public class TowerCraftingUI : MonoBehaviour
 {
     [SerializeField] private TowerPartEntryUI towerPartPrefab;
-
+    [SerializeField] private ResourceInventory resourceInventory;
     [SerializeField] private Transform basesContent;
     [SerializeField] private Transform coresContent;
     [SerializeField] private Transform headsContent;
@@ -28,6 +28,7 @@ public class TowerCraftingUI : MonoBehaviour
 
     [SerializeField] private PartDetailsUI partDetailsUI;
     [SerializeField] private TowerPartInventory towerPartInventory;
+    [SerializeField] private MonoBehaviour craftingRunner;
 
     // function: Start
     // purpose: Generates crafting cards when the game starts.
@@ -67,6 +68,8 @@ public class TowerCraftingUI : MonoBehaviour
                 entry.setBase(data);
                 entry.setDetailsUI(partDetailsUI);
                 entry.setTowerPartInventory(towerPartInventory);
+                entry.setResourceInventory(resourceInventory);
+                entry.setCraftingRunner(craftingRunner);
             }
         }
 
@@ -86,6 +89,8 @@ public class TowerCraftingUI : MonoBehaviour
                 entry.setCore(data);
                 entry.setDetailsUI(partDetailsUI);
                 entry.setTowerPartInventory(towerPartInventory);
+                entry.setResourceInventory(resourceInventory);
+                entry.setCraftingRunner(craftingRunner);
             }
         }
 
@@ -105,6 +110,8 @@ public class TowerCraftingUI : MonoBehaviour
                 entry.setHead(data);
                 entry.setDetailsUI(partDetailsUI);
                 entry.setTowerPartInventory(towerPartInventory);
+                entry.setResourceInventory(resourceInventory);
+                entry.setCraftingRunner(craftingRunner);
             }
         }
     }

@@ -71,7 +71,7 @@ public class TowerPartInventoryUI : MonoBehaviour
         {
             if (entry.Value > 0)
             {
-                createEntry(entry.Key.name, entry.Value);
+                createEntry(entry.Key.getDisplayName(), entry.Value);
             }
         }
 
@@ -80,7 +80,7 @@ public class TowerPartInventoryUI : MonoBehaviour
         {
             if (entry.Value > 0)
             {
-                createEntry(entry.Key.name, entry.Value);
+                createEntry(entry.Key.getDisplayName(), entry.Value);
             }
         }
 
@@ -89,7 +89,7 @@ public class TowerPartInventoryUI : MonoBehaviour
         {
             if (entry.Value > 0)
             {
-                createEntry(entry.Key.name, entry.Value);
+                createEntry(entry.Key.getDisplayName(), entry.Value);
             }
         }
     }

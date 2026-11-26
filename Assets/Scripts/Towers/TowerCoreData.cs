@@ -13,7 +13,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TowerCoreData", menuName = "Scriptable Objects/TowerCoreData")]
-public class TowerCoreData : ScriptableObject
+public class TowerCoreData : TowerPartData
 {
     [Header("Attributes")]
     public float damage;

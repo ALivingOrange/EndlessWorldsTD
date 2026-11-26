@@ -13,7 +13,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TowerBaseData", menuName = "EndlessWorldsTD Tower Base Data")]
-public class TowerBaseData : ScriptableObject
+public class TowerBaseData : TowerPartData
 {
     [Header("Attributes")]
     public float health;

@@ -12,6 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Basic_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
+  displayName: Basic Core
+  craftingCosts:
+  - resource: {fileID: 11400000, guid: cbfd6f4e69a1640f9aa32e88d48d9271, type: 2}
+    amount: 5
+  - resource: {fileID: 11400000, guid: 4ca88d080f1ab43ee9af6ca6429d82b4, type: 2}
+    amount: 10
   damage: 1.5
   fireInterval: 1
   shotsPerBurst: 1
