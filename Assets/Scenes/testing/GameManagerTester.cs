@@ -16,6 +16,14 @@ using UnityEngine.InputSystem;
 public class GameManagerTester : MonoBehaviour
 {
 
+    [SerializeField]
+    private Resource wood;
+
+    [SerializeField]
+    private Resource ore;
+
+
+
     private void Start()
     {
         Debug.Log("GameManagerTester has started!");
@@ -27,6 +35,8 @@ public class GameManagerTester : MonoBehaviour
         }
 
         GameManager.Instance.OnGameStateChanged += LogStateChange;
+
+        TestInventory();
     }
 
     private void OnDestroy()
@@ -89,6 +99,44 @@ public class GameManagerTester : MonoBehaviour
     private void LogStateChange(GameState newState)
     {
         Debug.Log("TEST: Game state is now " + newState);
+    }
+
+
+
+    // function: TestInventory
+    // purpose: Tests resource gains, resource spending, and insufficient resources.
+    private void TestInventory()
+    {
+        if (wood == null || ore == null)
+        {
+            Debug.LogError("Inventory test resources are missing.");
+            return;
+        }
+
+        GameManager.Instance.ResourceGain(wood, 20);
+        GameManager.Instance.ResourceGain(ore, 15);
+
+        Debug.Log("Wood after collecting: " +
+            GameManager.Instance.GetResourceAmount(wood));
+
+        Debug.Log("Ore after collecting: " +
+            GameManager.Instance.GetResourceAmount(ore));
+
+        bool firstSpend =
+            GameManager.Instance.ResourceSpend(wood, 5);
+
+        Debug.Log("Wood spend successful: " + firstSpend);
+
+        Debug.Log("Wood remaining: " +
+            GameManager.Instance.GetResourceAmount(wood));
+
+        bool secondSpend =
+            GameManager.Instance.ResourceSpend(ore, 20);
+
+        Debug.Log("Ore spend successful: " + secondSpend);
+
+        Debug.Log("Ore remaining: " +
+            GameManager.Instance.GetResourceAmount(ore));
     }
 
 

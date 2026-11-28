@@ -222,6 +222,7 @@ GameObject:
   - component: {fileID: 1603907680}
   - component: {fileID: 1603907679}
   - component: {fileID: 1603907681}
+  - component: {fileID: 1603907682}
   m_Layer: 0
   m_Name: GameManagerTest
   m_TagString: Untagged
@@ -268,6 +269,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb40b395e786e24699a94b46c68ada7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManagerTester
+  wood: {fileID: 0}
+  ore: {fileID: 0}
+--- !u!114 &1603907682
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1603907678}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d664d230f12f2426f9a532f2608d778f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ResourceInventory
 --- !u!1 &1764332657
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,6 +312,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5bb40b395e786e24699a94b46c68ada7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameManagerTester
+  wood: {fileID: 11400000, guid: cbfd6f4e69a1640f9aa32e88d48d9271, type: 2}
+  ore: {fileID: 11400000, guid: 4ca88d080f1ab43ee9af6ca6429d82b4, type: 2}
 --- !u!4 &1764332659
 Transform:
   m_ObjectHideFlags: 0

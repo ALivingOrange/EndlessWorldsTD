@@ -23,6 +23,9 @@ public enum GameState
     Paused,
     GameOver
 }
+
+
+[RequireComponent(typeof(ResourceInventory))]
 public class GameManager : MonoBehaviour
 {
 
@@ -30,6 +33,10 @@ public class GameManager : MonoBehaviour
     // variable: Instance
     // purpose: Provides access to the GameManager instance.
     public static GameManager Instance { get; private set; }
+
+    // variable: inventory
+    // purpose: Stores the players resource inventory.
+    private ResourceInventory inventory;
 
 
 
@@ -78,6 +85,44 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
         DontDestroyOnLoad(gameObject);
+
+        inventory = GetComponent<ResourceInventory>();
+    }
+
+
+
+    // function: ResourceGain
+    // purpose: Adds a specified amount of a resource to the player's inventory.
+    public void ResourceGain(Resource resource, int amount)
+    {
+        if (inventory == null)
+            return;
+
+        inventory.addResource(resource, amount);
+    }
+
+
+
+    // function: ResourceSpend
+    // purpose: Spend a specific amount of a resource, fails if there isn't enough of it.
+    public bool ResourceSpend(Resource resource, int amount)
+    {
+        if (inventory == null)
+            return false;
+
+        return inventory.spendResource(resource, amount);
+    }
+
+
+
+    // function: GetResourceAmount
+    // purpose: Returns how much of a resource the player currently owns.
+    public int GetResourceAmount(Resource resource)
+    {
+        if (inventory == null)
+            return 0;
+
+        return inventory.getResource(resource);
     }
 
 
