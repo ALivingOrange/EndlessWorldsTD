@@ -50,20 +50,17 @@ public class PartDetailsUI : MonoBehaviour
     }
 
     // function: showCoreDetails
-    // purpose: Displays the selected core's attributes.
+    // purpose: Displays the current tower core modifiers and damage type.
     public void showCoreDetails(TowerCoreData data)
     {
-        if (data == null)
-        {
-            return;
-        }
+        detailsPanel.SetActive(true);
+        detailsTitle.text = data.getDisplayName();
 
-        string stats =
-            "Damage: " + data.damage + "\n" +
-            "Fire Interval: " + data.fireInterval + "s\n" +
-            "Shots Per Burst: " + data.shotsPerBurst;
-
-        showDetails(data.getDisplayName(), stats);
+        detailsStats.text =
+            "Damage Modifier: " + data.damageModifier + "\n" +
+            "Fire Interval Modifier: " + data.fireIntervalModifier + "\n" +
+            "Area of Effect Modifier: " + data.areaOfEffectModifier + "\n" +
+            "Damage Type: " + data.damageType;
     }
 
     // function: showHeadDetails

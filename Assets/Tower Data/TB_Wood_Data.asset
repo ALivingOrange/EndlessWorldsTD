@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 11c39e6aed4307544937c503d1e43066, type: 3}
   m_Name: TB_Wood_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerBaseData
+  displayName: Wood Base
+  craftingCosts: []
   health: 50
   attackRange: 7
   visionAngle: 75

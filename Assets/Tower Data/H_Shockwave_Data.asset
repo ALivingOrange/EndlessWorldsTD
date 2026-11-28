@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
   m_Name: H_Shockwave_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
+  displayName: Shockwave Head
+  craftingCosts: []
   projectilePrefab: {fileID: 4064172114677785068, guid: 97cf15a866af75343b8992edbd825e5f, type: 3}
   numOfProjectiles: 1
   shotsPerBurst: 1

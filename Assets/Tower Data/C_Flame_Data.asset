@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Flame_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
+  displayName: Flame Core
+  craftingCosts: []
   damageModifier: 1.15
   fireIntervalModifier: 0.85
   areaOfEffectModifier: 1

@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Shock_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
+  displayName: Shock Core
+  craftingCosts: []
   damageModifier: 1.3
   fireIntervalModifier: 1.3
   areaOfEffectModifier: 0.8

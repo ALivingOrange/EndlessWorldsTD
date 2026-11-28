@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Chain_Drive_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
+  displayName: Chain Drive Core
+  craftingCosts: []
   damageModifier: 0.8
   fireIntervalModifier: 0.2
   areaOfEffectModifier: 0.5

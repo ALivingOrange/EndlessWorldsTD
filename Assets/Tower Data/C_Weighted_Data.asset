@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3def9ff464d155940b02c621ac1194bc, type: 3}
   m_Name: C_Weighted_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerCoreData
+  displayName: Weighted Core
+  craftingCosts: []
   damageModifier: 2.25
   fireIntervalModifier: 2.5
   areaOfEffectModifier: 3

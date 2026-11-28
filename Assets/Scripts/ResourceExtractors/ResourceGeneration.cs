@@ -16,9 +16,14 @@ public class RescourceGeneration : MonoBehaviour
     [SerializeField]
     public float rate;
     public Resource type; 
-
+    [SerializeField] private ResourceInventory inventory;
     void Start()
     {
+        if (inventory == null || type == null || rate <= 0f)
+        {
+            Debug.LogError("Resource extractor is missing setup.");
+            return;
+        }
         // Starts loop via Coroutine
         StartCoroutine(Repetition());
     }
@@ -29,7 +34,7 @@ public class RescourceGeneration : MonoBehaviour
         {
             // Increments rescource type by 1 on loop
             yield return new WaitForSeconds(rate);
-            InventoryTest.inventory.addResource(type, 1);
+            inventory.addResource(type, 1);
             Debug.Log(this.name + "Tick!");
         }
     }

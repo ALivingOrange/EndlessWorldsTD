@@ -2098,15 +2098,20 @@ MonoBehaviour:
   headsContent: {fileID: 1383643758}
   availableBases:
   - {fileID: 11400000, guid: afd8918f498d3834f8bf1c20ce4f32ae, type: 2}
+  - {fileID: 11400000, guid: 42514f0c7e89d4f40ad8723e419e0de5, type: 2}
   availableCores:
   - {fileID: 11400000, guid: 089c4d5dcef368a4abba5a330ec318f3, type: 2}
-  - {fileID: 11400000, guid: 23952dfb836ca1f4494280e146f13df6, type: 2}
   - {fileID: 11400000, guid: a68e54e9d324f6147acb4e2e40edea3b, type: 2}
   - {fileID: 11400000, guid: a8433a92d27e3674c8315e9b50ae043a, type: 2}
+  - {fileID: 11400000, guid: d0a53491fd840324397a9b260007e951, type: 2}
+  - {fileID: 11400000, guid: 362cd7348720b2d4b981a0cf2e7f16fa, type: 2}
+  - {fileID: 11400000, guid: 572dc4e75805ca94ba20ad82c30a0235, type: 2}
   availableHeads:
   - {fileID: 11400000, guid: 1503a6a3448d34d4d8b6d8866f92afbc, type: 2}
   - {fileID: 11400000, guid: ddf3bf7cdb10bcd49b6ad971c90c32cc, type: 2}
   - {fileID: 11400000, guid: a3846fdeaa526324ca2581f2e7c43167, type: 2}
+  - {fileID: 11400000, guid: be9767e008551f742aaaf600d218e1be, type: 2}
+  - {fileID: 11400000, guid: 8fc24f1c1ed142f4286a900a798663f0, type: 2}
   partDetailsUI: {fileID: 688279744}
   towerPartInventory: {fileID: 2126714926}
   craftingRunner: {fileID: 1073661402}

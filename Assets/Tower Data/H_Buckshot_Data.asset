@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
   m_Name: H_Buckshot_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
+  displayName: Buckshot Head
+  craftingCosts: []
   projectilePrefab: {fileID: 6287745687980472240, guid: 74ed33c3bfc776b4892d92e7fb665dc7, type: 3}
   numOfProjectiles: 3
   shotsPerBurst: 1

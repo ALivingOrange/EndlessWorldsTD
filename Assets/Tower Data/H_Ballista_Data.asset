@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6a474418105f1ce4d969936c3be56b48, type: 3}
   m_Name: H_Ballista_Data
   m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
+  displayName: Ballista Head
+  craftingCosts: []
   projectilePrefab: {fileID: 3429183022777357808, guid: 8fa3f76aedd927246bee75e62c927d8e, type: 3}
   numOfProjectiles: 1
   shotsPerBurst: 1
