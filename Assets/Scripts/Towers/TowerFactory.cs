@@ -18,7 +18,8 @@ public class TowerFactory : MonoBehaviour
     public TowerBaseData towerBase;
     public TowerCoreData towerCore;
     public TowerHeadData towerHead;
-
+    [Header("Testing Options")]
+    [SerializeField] private bool spawnTestTower = false;
     // function: CreateTower
     // Purpose: This is the function that'll actually make the tower units.
     //          We make the TowerBaseManager GameObject which takes the TowerBaseData parameter.
@@ -47,10 +48,15 @@ public class TowerFactory : MonoBehaviour
     // function: Start
     // Purpose: Called on the frame when this script is enabled.
     //          As of 11/14/2026, acts as a test for TowerCreate.
+// function: Start
+// purpose: Spawns a test tower only when testing is enabled.
     void Start()
     {
-        CreateTower(towerBase, towerCore, towerHead, Vector3.zero);
-    }
+        if (spawnTestTower)
+        {
+            CreateTower(towerBase, towerCore, towerHead, Vector3.zero);
+        }
+}   
 
     // Update is called once per frame
     void Update()
