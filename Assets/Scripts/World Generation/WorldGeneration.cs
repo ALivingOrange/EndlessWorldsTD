@@ -4,7 +4,7 @@ author: Joshua C. Lo
 class: CS4700 - Game Development
 
 assignemnt: Program 3
-date last modified: 11/19/2026
+date last modified: 11/24/2026
 
 purpose: The purpose of this program is to create the map and assign each
 world tile a terrain type while also checking neighboring tiles to ensure world
@@ -16,68 +16,79 @@ using UnityEngine;
 
 public class WorldGeneration : MonoBehaviour
 {
-    public WorldBounds WorldBounds = new WorldBounds(500f, 500f);
-    public float tileSize = 5f;
+    [SerializeField] private WorldGenerationSettings settings;
 
-    //Controls how the map is generated
-    public int seed = 1111111;
-    public bool randomSeed = true;     //Choses a new seed when a new map is generated
-
-    private float noiseScale = 0.08f;   //The size of Perlin Noise patterns
-    public float waterGeneration = 0.30f;
-    public float roughGeneration = 0.58f;
-    public float cliffGeneration = 0.78f;
-    public int smoothing = 2;   //Checks the generation of the world to make sure its coherent
-
-    private List<WorldTiles> tiles = new List<WorldTiles>();     //Stores the individual cells of the generated world so we can access them
+    private List<WorldTiles> tiles = new List<WorldTiles>();
     private WorldTiles[,] tileGrid;
     private int columns;
     private int rows;
     public IReadOnlyList<WorldTiles> Tiles => tiles;
-    public float TileSize => tileSize;
+    public float tileSize => settings != null ? settings.tileSize : 0f;
 
-    //Generates a world when the game starts
-    private void Start(){
-        GenerateWorld();
-    }
-
-    //Handles the world generation
-    private void GenerateWorld(){
-        if(tileSize <= 0){
+    //Game manager should be able to call this function hopefully
+    public bool GenerateWorld(){
+        //Makes sure that world generation settings exist
+        if(settings == null){
+            Debug.Log("World Generation Settings have not been assigned");
+            return false;
+        }
+        //Makes sure tile size is valid
+        if(settings.tileSize <= 0){
             Debug.Log("Tile size has to be greater than 0");
-            return;
-        }
-        if(randomSeed){     //Randomizes a new seed if randomized seed is set to true
-            seed = new System.Random().Next();
-        }
-        System.Random random = new System.Random(seed);     //Generates a random number for the seed
+            return false;
+        }   
+        //Generates the world several times depending on if it's a good seed or not
+        for(int attempt = 0; attempt < settings.maxGen; attempt++){
+            Debug.Log("Generating World, Attempt No.: " + (attempt + 1));
+            int worldSeed;
 
-        float randomXoffset = (float)random.NextDouble() * 10000f;
-        float randomYoffset = (float)random.NextDouble() * 10000f;
+            if(settings.randomSeed){
+                worldSeed = Random.Range(0, int.MaxValue);
+            }
+            else{
+                worldSeed = settings.seed;  //Uses seed set in the settings
+            }
+            System.Random random = new System.Random(worldSeed);
+            //Random offsets for perlin noise
+            float randomXoffset = (float)random.NextDouble() * 10000f;
+            float randomYoffset = (float)random.NextDouble() * 10000f; 
 
-        CreateGrid();      //Creates an empty grid for the world to store tiles
-        GenerateTerrain(randomXoffset, randomYoffset);
+            CreateGrid();   //Creates an empty grid for the world
+            GenerateTerrain(randomXoffset, randomYoffset); //Generates the terrain for the world
 
-        for(int i = 0; i < smoothing; i++){     //Makes the terrain look more natural so there aren't random water/cliff tiles in the middle of no where
-            TerrainSmoothing();
+            //Smooths terrain
+            for(int i = 0; i < settings.smoothing; i++){
+                TerrainSmoothing();
+            }
+            //Checks to make sure if the map has good world generation
+            if(CheckMap()){
+                Debug.Log("Map has been successfully generated");
+                Debug.Log("Total tiles generated: " + tiles.Count);
+                ResourcePoints();   //Places resource points on the map
+
+                return true;
+            }
+            //The map sucked, so it will generate another map
+            Debug.Log("Map has too many unreachable areas. Generating a new map.");
         }
-        Debug.Log("Map has successfully generated!");   //Message that prints out to ensure it works
-        Debug.Log("Total tiles generated: " + tiles.Count);
+        //All 10 generated maps suck 
+        Debug.Log("Could not generate a valid map.");
+        return false;
     }
 
     private void CreateGrid(){
         tiles.Clear();
         //Gets the amount of tiles that can fit in the world
-        columns = Mathf.CeilToInt(WorldBounds.width / tileSize);
-        rows = Mathf.CeilToInt(WorldBounds.height / tileSize);
+        columns = Mathf.CeilToInt(settings.worldWidth / settings.tileSize);
+        rows = Mathf.CeilToInt(settings.worldHeight / settings.tileSize);
         tileGrid = new WorldTiles[columns, rows];
         
-        Vector2 worldMin = WorldBounds.Min;
+        Vector2 worldMin = new Vector2(-settings.worldWidth / 2f, -settings.worldHeight / 2f);
         //Creates every tile in the world
         for(int x = 0; x < columns; x++){
             for(int y = 0; y < rows; y++){
                 //Gets the center position of each tile
-                Vector2 position = new Vector2(worldMin.x + (x + 0.5f) * tileSize, worldMin.y + (y + 0.5f) * tileSize);
+                Vector2 position = new Vector2(worldMin.x + (x + 0.5f) * settings.tileSize, worldMin.y + (y + 0.5f) * settings.tileSize);
                 WorldTiles newTile = new WorldTiles(position);  //Creates a new tile
                 tileGrid[x,y] = newTile;    //Stores the tile in the grid
                 tiles.Add(newTile);     //Adds the tile to the list of tiles in the world
@@ -91,17 +102,17 @@ public class WorldGeneration : MonoBehaviour
         for(int x = 0; x < columns; x++){
             for(int y = 0; y < rows; y++){
                 //Calculates the perlin noise within that tile
-                float noise = Mathf.PerlinNoise((x * noiseScale) + randomXoffset, (y * noiseScale) + randomYoffset);
+                float noise = Mathf.PerlinNoise((x * settings.noiseScale) + randomXoffset, (y * settings.noiseScale) + randomYoffset);
                 //Gets the current tile
                 WorldTiles tile = tileGrid[x,y];
                 //Depending on the value of the perlin noise value, it assigns a terrain
-                if(noise < waterGeneration){
+                if(noise < settings.waterGeneration){
                     tile.setTerrain(TerrainType.Water);
                 }
-                else if(noise > cliffGeneration){
+                else if(noise > settings.cliffGeneration){
                     tile.setTerrain(TerrainType.Cliff);
                 }
-                else if(noise > roughGeneration){
+                else if(noise > settings.roughGeneration){
                     tile.setTerrain(TerrainType.Rough);
                 }
                 else{
@@ -154,11 +165,140 @@ public class WorldGeneration : MonoBehaviour
                     tileGrid[x,y].setTerrain((TerrainType)mostCommonTerrain);
                 }
             }
-
         }
-
     }
 
+    private bool CheckMap(){
+        int buildableTiles = 0;
+        int walkableTiles = 0;
+        foreach(WorldTiles tile in tiles){
+            if(tile.terrainType == TerrainType.Normal || tile.terrainType == TerrainType.Rough){
+                buildableTiles++;
+            }
+            if(tile.walkable){
+                walkableTiles++;
+            }
+        }
+        if(tiles.Count == 0){
+            return false;
+        }
+        
+        float buildablePercent = (float)buildableTiles / tiles.Count;
+        float walkablePercent = (float)walkableTiles / tiles.Count;
+
+        Debug.Log("Buildable tiles: " + (buildablePercent * 100f) + "%");
+        Debug.Log("Enemy Walkable tiles: " + (walkablePercent * 100f) + "%");
+
+        if(buildablePercent < settings.minBuildablePercent){
+            Debug.Log("There are not enough buildable tiles");
+            return false;
+        }
+        if(walkablePercent < settings.minWalkablePercent){
+            Debug.Log("There are not enough walkable tiles");
+            return false;
+        }
+        
+        int unreachableTiles = findImpassableTiles();
+
+        if(walkableTiles == 0){
+            return false;
+        }
+
+        float impassablePercent = (float)unreachableTiles / walkableTiles;
+        Debug.Log("Impassable walkable tiles: " + (impassablePercent * 100f)+ "%");
+
+        if(impassablePercent > settings.maxImpassablePercent){
+            Debug.Log("There is too much impassable terrain");
+            return false;
+        }
+
+        return true;
+    }
+
+    private int findImpassableTiles(){
+        WorldTiles startingTile = null;
+        foreach(WorldTiles tile in tiles){
+            if(tile.walkable){
+                startingTile = tile;
+                break;
+            }
+        }
+
+        if(startingTile == null){
+            return 0;
+        }
+
+        int startX = -1;
+        int startY = -1;
+
+        for(int x = 0; x < columns; x++){
+            for(int y = 0; y < rows; y++){
+                if(tileGrid[x,y] == startingTile){
+                    startX = x;
+                    startY = y;
+                    break;
+                }
+            }
+            if(startX != -1){
+                break;
+            }
+        }
+        bool[,] visited = new bool[columns, rows];
+        Queue<Vector2Int> tilesToCheck = new Queue<Vector2Int>();
+        tilesToCheck.Enqueue(new Vector2Int(startX, startY));
+        visited[startX, startY] = true;
+
+        int[] directionX = {1, -1, 0, 0};
+        int[] directionY = {0, 0, 1, -1};
+
+        while(tilesToCheck.Count > 0){
+            Vector2Int current = tilesToCheck.Dequeue();
+            for(int i = 0; i < 4; i++){
+                int nextX = current.x + directionX[i];
+                int nextY = current.y + directionY[i];
+                if(nextX < 0 || nextX >= columns || nextY < 0 || nextY >= rows){
+                    continue;
+                }
+                if(visited[nextX, nextY]){
+                    continue;
+                }
+                if(!tileGrid[nextX, nextY].walkable){
+                    continue;
+                }
+                visited[nextX, nextY] = true;
+                tilesToCheck.Enqueue(new Vector2Int(nextX, nextY));
+            }
+        }
+        int impassableTiles = 0;
+
+        for(int x = 0; x < columns; x++){
+            for(int y = 0; y < rows; y++){
+                if(tileGrid[x,y].walkable && !visited[x,y]){
+                    impassableTiles++;
+                }
+            }
+        }
+        return impassableTiles;
+    }
+
+    private void ResourcePoints(){
+        int resourcesPlaced = 0;
+        List<WorldTiles> possibleTiles = new List<WorldTiles>();
+        foreach(WorldTiles tile in tiles){
+            if(tile.walkable){
+                possibleTiles.Add(tile);
+            }
+        }
+        while(resourcesPlaced < settings.resources && possibleTiles.Count > 0){
+            int randomIndex = Random.Range(0, possibleTiles.Count);
+            WorldTiles selectedTile = possibleTiles[randomIndex];
+            selectedTile.AddResource();
+            possibleTiles.RemoveAt(randomIndex);
+            resourcesPlaced++;  
+        }
+        Debug.Log("Resources points placed: " + resourcesPlaced);
+    }
+    
     //Used to find world tiles at a given coordinate inside the tile grid
     public WorldTiles GetTile(int x, int y){
         if(x < 0 || x >= columns || y < 0 || y >= rows){
@@ -169,10 +309,10 @@ public class WorldGeneration : MonoBehaviour
 
     //Used to find world tiles based on its position in the world
     public WorldTiles GetTileAt(Vector2 worldPosition){
-        Vector2 worldMin = WorldBounds.Min;
+        Vector2 worldMin = new Vector2(-settings.worldWidth / 2f, -settings.worldHeight / 2f);
 
-        int x = Mathf.FloorToInt((worldPosition.x - worldMin.x) / tileSize);
-        int y = Mathf.FloorToInt((worldPosition.y - worldMin.y) / tileSize);
+        int x = Mathf.FloorToInt((worldPosition.x - worldMin.x) / settings.tileSize);
+        int y = Mathf.FloorToInt((worldPosition.y - worldMin.y) / settings.tileSize);
 
         return GetTile(x,y);
     }

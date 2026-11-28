@@ -4,7 +4,7 @@ author: Joshua C. Lo
 class: CS4700 - Game Development
 
 assignemnt: Program 3
-date last modified: 11/19/2026
+date last modified: 11/26/2026
 
 purpose: The purpose of this program is to determine what each individual map tile
 allows. For example, if the tile if walkable or impassible.
@@ -23,6 +23,7 @@ public class WorldTiles
     public bool walkable;
     public bool isWater;
     public float difficulty;
+    public bool hasResource;
 
     //Creates a tile at the position
     public WorldTiles(Vector2 position){
@@ -57,5 +58,14 @@ public class WorldTiles
                 difficulty = 3.0f;
                 break;
         }
+        hasResource = false;
+    }
+
+    public void AddResource(){
+        hasResource = true;
+    }
+
+    public void RemoveResource(){
+        hasResource = false;
     }
 }
