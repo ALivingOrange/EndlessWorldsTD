@@ -14,9 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TowerHeadData
   projectilePrefab: {fileID: 4064172114677785068, guid: 97cf15a866af75343b8992edbd825e5f, type: 3}
   numOfProjectiles: 1
+  shotsPerBurst: 1
+  baseDamage: 1.5
+  baseFireInterval: 1.5
+  baseAOE: 10
   randomizeProjectileCount: 0
   minProjectiles: 3
   maxProjectiles: 6
   spreadAngle: 60
-  turnSpeed: 0
+  turnSpeed: 100
   headPrefab: {fileID: 6760826542085223097, guid: cd256bdad31d3c847bfaefa99bc57495, type: 3}

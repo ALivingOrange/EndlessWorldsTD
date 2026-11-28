@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/21/2026
 *
 *purpose: Allows the Tower Cores to function as intended by the development team
 *         Determines the physics attributes of the tower, i.e. damage, fire rate, shots per burst.
@@ -29,22 +29,36 @@ public class TowerCoreManager : MonoBehaviour
     public float currDamage;
     public float currFireInterval;
     public int currShotsPerBurst;
+    public float currAOE;
+    public DamageType currDamageType;
     private float fireCountdown = 0f;
 
     // function: Initialize
-    // Purpose: The data from coreData is implemented in this script, as well as parentBase being assigned to the base b.
+    // Purpose: We assign parentBase to the base b.
+    //          Then we see if we have an attached head w/ data.
+    //          If we do then we combine the head's base attack stats with the core's stat modifiers to get our current attack stats.
     public virtual void Initialize(TowerBaseManager b)
     {
         parentBase = b;
 
-        if (coreData == null)
+        if (coreData == null || parentBase == null)
         {
             return;
         }
-       
-        currDamage = coreData.damage;
-        currFireInterval = coreData.fireInterval;
-        currShotsPerBurst = coreData.shotsPerBurst;
+
+        TowerHeadManager head = parentBase.attachedHead;
+        if (head == null || head.headData == null)
+        {
+            return;
+        }
+
+        TowerHeadData headStats = head.headData;
+        currDamage = headStats.baseDamage * coreData.damageModifier;
+        currFireInterval = Mathf.Max(0.01f, headStats.baseFireInterval * coreData.fireIntervalModifier);
+        currAOE = headStats.baseAOE * coreData.areaOfEffectModifier;
+        currShotsPerBurst = headStats.shotsPerBurst;
+
+        currDamageType = coreData.damageType;
     }
 
     // function: Update
@@ -65,11 +79,21 @@ public class TowerCoreManager : MonoBehaviour
             return;
         }
 
-        if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
+        if (fireCountdown > 0f)
         {
-            if (fireCountdown > 0f)
-            { 
-                fireCountdown = Time.deltaTime;
+            fireCountdown -= Time.deltaTime;
+        }
+
+        if (parentBase.attachedHead.RequiresTarget)
+        {
+            if (parentBase.Target == null)
+            {
+                return;
+            }
+
+            if (!parentBase.attachedHead.IsFacingTarget())
+            {
+                return;
             }
         }
 
@@ -78,8 +102,6 @@ public class TowerCoreManager : MonoBehaviour
             StartCoroutine(FireBurst());
             fireCountdown = MathF.Max(0.01f, currFireInterval);
         }
-
-        fireCountdown -= Time.deltaTime;
     }
 
     // function: FireBurst()
@@ -97,14 +119,22 @@ public class TowerCoreManager : MonoBehaviour
                 yield break;
             }
 
-            if (parentBase.attachedHead.RequiresTarget && parentBase.Target == null)
+            if (parentBase.attachedHead == null)
             {
                 yield break;
             }
 
-            if (parentBase.attachedHead == null)
+            if (parentBase.attachedHead.RequiresTarget)
             {
-                yield break;
+                if (parentBase.Target == null)
+                {
+                    yield break;
+                }
+
+                if (!parentBase.attachedHead.IsFacingTarget())
+                {
+                    yield break;
+                }
             }
             
             parentBase.attachedHead.Shoot(parentBase.Target, currDamage);

@@ -3,9 +3,9 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/22/2026
 *
-*purpose: Contains the physics behind the shockwave projectile prefab.
+*purpose: Contains the physics behind immediate AOE projectiles.
 *         Allows the unique projectile to scale up from the center of the tower head and deal damage to any enemies around it.
 *         Attacks all over the tower's attack range, and dissipates once outside the range.
 *
@@ -35,14 +35,19 @@ public class ShockwavePhysics : MonoBehaviour
     public LineRenderer shockwaveLine;
     public int circleSegments = 64;
 
+    [Header("Element Damage Properties")]
+    private DamageType damageType = DamageType.Normal;
+    private bool lightningTriggered = false;
+
     // function: Initialize
     // Purpose: Gives values to maxRadius and damage, and makes initialized true.
     //          Occurs when a ShockwaveHead is placed on a TowerBase
-    public void Initialize(float range, float damageAmount)
+    public void Initialize(float range, float damageAmount, DamageType type)
     {
         maxRadius = range;
         damage = damageAmount;
         initialized = true;
+        damageType = type;
     }
 
     // function: Update
@@ -95,9 +100,28 @@ public class ShockwavePhysics : MonoBehaviour
 
             if (distance >= previousRadius && distance <= currentRadius)
             {
+                damagedEnemies.Add(enemy);
 
                 enemy.TakeDamage(damage);
-                damagedEnemies.Add(enemy);
+
+                EnemyElementalEffects effects = enemy.GetComponent<EnemyElementalEffects>();
+                if (effects != null)
+                {
+                    if (damageType == DamageType.Ice)
+                    {
+                        effects.ApplyFreeze(3f);
+                    }
+                    else if (damageType == DamageType.Fire)
+                    {
+                        effects.ApplyBurn(3f, 1f);
+                    }
+                }
+
+                if (damageType == DamageType.Lightning && !lightningTriggered)
+                {
+                    lightningTriggered = true;
+                    ChainLightning.Trigger(enemy, damage, damagedEnemies);
+                }
             }
         }
 

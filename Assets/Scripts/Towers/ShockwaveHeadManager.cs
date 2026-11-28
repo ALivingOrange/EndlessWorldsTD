@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/21/2026
 *
 *purpose: Allows the Specialty Shockwave Tower Heads to function as intended by the development team
 *         Gives the head attacking abilities that make it differ from normal TowerHeadManager objects. Though it derives from the script
@@ -23,6 +23,7 @@ public class ShockwaveHeadManager : TowerHeadManager
     //          Once the script knows the shockwave has all requirements, it calls Initialize()
     public override void Shoot(Transform target, float damage)
     {
+
         if (parentBase == null || headData == null || headData.projectilePrefab == null)
         {
             Debug.LogWarning("Shockwave Head is missing required references");
@@ -30,7 +31,7 @@ public class ShockwaveHeadManager : TowerHeadManager
         }
 
         // Checking to see if enemies are nearby
-        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(parentBase.transform.position, parentBase.currentRange);
+        Collider2D[] nearbyColliders = Physics2D.OverlapCircleAll(parentBase.transform.position, parentBase.attachedCore.currAOE);
         bool enemyNearby = false;
         foreach (Collider2D collider in nearbyColliders)
         {
@@ -56,6 +57,6 @@ public class ShockwaveHeadManager : TowerHeadManager
             return;
         }
 
-        shockwave.Initialize(parentBase.currentRange, damage);
+        shockwave.Initialize(parentBase.attachedCore.currAOE, damage, parentBase.attachedCore.currDamageType);
     }
 }

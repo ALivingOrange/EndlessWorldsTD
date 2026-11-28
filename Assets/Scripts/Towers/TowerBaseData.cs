@@ -3,10 +3,10 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/14/2026
+*date last modified: 11/21/2026
 *
 *purpose: Holds the data used in the TowerBaseManager.cs script
-*         Because it is a separate file, any single shot towers can have unique stats without too much alteration
+*         Because it is a separate file, any towers can have unique stats without too much alteration
 *         
 *
 ****************************************************************/
@@ -19,8 +19,9 @@ public class TowerBaseData : TowerPartData
     public float health;
     public float attackRange;
     public float visionAngle = 90f;
+    public float turnSpeedModifier = 1f;
 
     [Header("Unity Setup Fields")]
-    public string enemyTag;
+    public string enemyTag = "Enemy";
     public GameObject basePrefab;
 }

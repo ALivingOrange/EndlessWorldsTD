@@ -3,7 +3,7 @@
 *author: G. Valdiviez
 *class: CS 4700 – Game Development
 *assignment: Final Program
-*date last modified: 11/8/2026
+*date last modified: 11/21/2026
 *
 *purpose: Allows the Tower Heads to function as intended by the development team
 *         Determines the projectile that a full tower fires, alongside special characteristics depending on the head type.
@@ -56,9 +56,20 @@ public class TowerHeadManager : MonoBehaviour
             return;
         }
 
+        if (headData == null || partToRotate == null)
+        {
+            return;
+        }
+
+        if (!RequiresTarget)
+        {
+            return;
+        }
+
+        float effectiveTurnSpeed = headData.turnSpeed * parentBase.baseData.turnSpeedModifier;
         if (parentBase.Target == null)
         {
-            partToRotate.rotation = Quaternion.RotateTowards(partToRotate.rotation, defaultRotation, headData.turnSpeed * Time.deltaTime * 50f);
+            partToRotate.rotation = Quaternion.RotateTowards(partToRotate.rotation, defaultRotation, effectiveTurnSpeed * Time.deltaTime * 50f);
             return;
         }
 
@@ -67,7 +78,24 @@ public class TowerHeadManager : MonoBehaviour
         float offset = -90f;
         Quaternion lookRotation = Quaternion.Euler(new Vector3(0, 0, angle + offset));
 
-        partToRotate.rotation = Quaternion.RotateTowards(partToRotate.rotation, lookRotation, headData.turnSpeed * Time.deltaTime * 50f);
+        partToRotate.rotation = Quaternion.RotateTowards(partToRotate.rotation, lookRotation, effectiveTurnSpeed * Time.deltaTime * 50f);
+    }
+
+    // function: Shoot
+    // Purpose: Checks to see if the tower head is facing at most 5 degrees away from the nearest enemy.
+    public bool IsFacingTarget()
+    {
+        if (parentBase == null || parentBase.Target == null || partToRotate == null)
+        { 
+            return false;
+        }
+
+        Vector2 direction = parentBase.Target.position - partToRotate.position;
+        float targetAngle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg - 90f;
+        Quaternion targetRotation = Quaternion.Euler(0f, 0f, targetAngle);
+        float angleDifference = Quaternion.Angle(partToRotate.rotation, targetRotation);
+
+        return angleDifference <= 5f;
     }
 
     // function: Shoot
@@ -109,7 +137,19 @@ public class TowerHeadManager : MonoBehaviour
 
             if (projectile != null)
             {
-                projectile.Seek(projectileDirection, damage);
+                projectile.Seek(projectileDirection, damage, parentBase.attachedCore.currDamageType);
+            }
+
+            ContactAOEPhysics contactAOE = firedProjectile.GetComponent<ContactAOEPhysics>();
+            if (contactAOE != null)
+            {
+                contactAOE.Seek(projectileDirection, damage, parentBase.attachedCore.currAOE, parentBase.attachedCore.currDamageType);
+            }
+
+            PierceBulletPhysics pierceBullet = firedProjectile.GetComponent<PierceBulletPhysics>();
+            if (pierceBullet != null)
+            {
+                pierceBullet.Seek(projectileDirection, damage, parentBase.attachedCore.currAOE, parentBase.attachedCore.currDamageType);
             }
         }
     }

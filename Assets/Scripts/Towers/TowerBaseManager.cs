@@ -54,14 +54,14 @@ public class TowerBaseManager : MonoBehaviour
         currentHP = baseData.health;
         currentRange = baseData.attackRange;
 
-        if (attachedCore != null)
-        {
-            attachedCore.Initialize(this);
-        }
-
         if (attachedHead != null)
         {
             attachedHead.Initialize(this);
+        }
+
+        if (attachedCore != null)
+        {
+            attachedCore.Initialize(this);
         }
 
         InvokeRepeating(nameof(UpdateTarget), 0f, 0.1f);
@@ -200,6 +200,10 @@ public class TowerBaseManager : MonoBehaviour
 
         attachedHead = head;
         head.Initialize(this);
+        if (attachedCore != null)
+        {
+            attachedCore.Initialize(this);
+        }
 
         return;
 
